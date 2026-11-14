@@ -4,19 +4,21 @@
 :root {
   --cream: #F3E3BF;      /* krem papieru */
   --apricot: #E4BC7F;    /* morela */
-  --coral: #E08364;      /* koral */
+  --coral: #EF7B62;      /* koral (pipeta z docs/ref/wyciete/pasek-cel.png) */
   --rose-dim: #9D585B;   /* przygaszony róż */
   --rose-card: #B5686B;  /* róż karty */
   --sea: #2C4D54;        /* morski */
   --ink: #1F0C01;        /* atrament */
   --plum: #6A2E30;       /* śliwka */
   --brown: #3B2314;      /* ciemny brąz */
+  --paper-white: #F2F1E8; /* biała obwódka pasków (wzór: docs/ref/wyciete/pasek-*.png) */
+  --bar-cream: #EDDAAA;  /* kremowy środek pasków, wg wzoru */
+  --bar-text: #3A1828;   /* tekst pasków, ciemna śliwka wg wzoru */
 
   --font-head: 'Alfa Slab One', serif;
   --font-body: 'Bree Serif', serif;
 
   --outline: 4px solid var(--ink);
-  --shadow-bar: 6px 6px 0 var(--rose-dim);
 }
 
 /* Płótno 1920×1080, przezroczyste */
@@ -46,29 +48,40 @@ body.mode-gra .g-column {
   display: block;
 }
 
-/* Wspólny pasek G2/G3 */
+/* Wspólny pasek G2/G3 (wzór: docs/ref/wyciete/pasek-cel.png, pasek-ostatni-follow.png):
+   cienki ciemny brzeg > biała obwódka > cienka ciemna linia > kremowy środek */
 .ej-bar {
+  box-sizing: border-box;
+  width: 360px;
+  height: 60px;
+  padding: 7px;
+  background: var(--paper-white);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 2px 4px 0 var(--ink);
+}
+
+.ej-bar-inner {
   position: relative;
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 8px;
-  width: 360px;
-  height: 60px;
-  padding: 0 14px;
-  background: var(--cream);
-  border: var(--outline);
-  border-radius: 0;
-  box-shadow: var(--shadow-bar);
-  font-size: 24px;
-  white-space: nowrap;
+  gap: 6px;
+  height: 100%;
+  padding: 0 10px;
+  background: var(--bar-cream);
+  border: 2px solid var(--ink);
   overflow: hidden;
+  color: var(--bar-text);
+  font-size: 22px;
+  -webkit-text-stroke: 0.6px var(--bar-text); /* pogrubienie jak na wzorze */
+  white-space: nowrap;
 }
 
 /* G2: cel followów */
-.g2-value,
+.g2-text,
 .g2-percent {
-  color: var(--plum);
+  position: relative; /* nad wypełnieniem */
 }
 
 .g2-percent {
@@ -78,15 +91,25 @@ body.mode-gra .g-column {
 .g2-progress {
   position: absolute;
   left: 0;
+  top: 0;
   bottom: 0;
   width: 0;
-  height: 8px;
+  box-sizing: border-box;
   background: var(--coral);
+  border-right: 2px solid var(--ink);
+}
+
+.g2-progress.is-empty {
+  border-right: 0;
 }
 
 /* G3: ostatni follow */
 .g3-follow {
   margin-top: 20px;
+}
+
+.g3-follow .ej-bar-inner {
+  justify-content: center;
 }
 
 .g3-label {
@@ -97,16 +120,26 @@ body.mode-gra .g-column {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--plum);
 }
 
-.g3-follow.is-flash {
+/* Gwiazdka w konturze w prawym dolnym rogu */
+.g3-follow .ej-bar-inner::after {
+  content: '\2606';
+  position: absolute;
+  right: 3px;
+  bottom: 0;
+  font-size: 13px;
+  line-height: 1;
+  -webkit-text-stroke: 0;
+}
+
+.g3-follow.is-flash .ej-bar-inner {
   animation: g3-flash 1.2s ease-out;
 }
 
 @keyframes g3-flash {
   0%, 30% { background: var(--apricot); }
-  100% { background: var(--cream); }
+  100% { background: var(--bar-cream); }
 }
 
 /* Napis debug (?debug=1) w prawym górnym rogu */

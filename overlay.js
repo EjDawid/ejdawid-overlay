@@ -41,17 +41,21 @@
     // Kolumna przy lewej krawędzi (tylko tryb gra)
     const column = make('div', 'g-column');
 
-    // G2: pasek celu followów
+    // G2: pasek celu followów (biała obwódka > kremowy środek > koralowe wypełnienie)
     el.g2 = make('div', 'ej-bar g2-goal');
+    const g2Inner = make('div', 'ej-bar-inner');
     el.g2Text = make('span', 'g2-text');
     el.g2Percent = make('span', 'g2-percent');
     el.g2Progress = make('div', 'g2-progress');
-    el.g2.append(el.g2Text, el.g2Percent, el.g2Progress);
+    g2Inner.append(el.g2Progress, el.g2Text, el.g2Percent);
+    el.g2.appendChild(g2Inner);
 
-    // G3: ostatni follow
+    // G3: ostatni follow (tekst na środku, gwiazdka w rogu z CSS)
     el.g3 = make('div', 'ej-bar g3-follow');
+    const g3Inner = make('div', 'ej-bar-inner');
     el.g3Nick = make('span', 'g3-nick');
-    el.g3.append(make('span', 'g3-label', 'Ostatni follow:'), el.g3Nick);
+    g3Inner.append(make('span', 'g3-label', 'Ostatni follow:'), el.g3Nick);
+    el.g3.appendChild(g3Inner);
 
     column.append(el.g2, el.g3);
     root.appendChild(column);
@@ -73,17 +77,22 @@
   function renderGoal() {
     if (state.followers >= state.goal) state.goalReached = true;
 
-    el.g2Text.textContent = '';
     if (state.goalReached) {
       el.g2Text.textContent = 'Cel osiągnięty ★';
       el.g2Percent.textContent = '';
-      el.g2Progress.style.width = '100%';
+      setProgress(100);
       return;
     }
     const percent = Math.min(100, Math.floor((state.followers / state.goal) * 100));
-    el.g2Text.append('Cel: ', make('span', 'g2-value', state.followers + '/' + state.goal), ' followów');
+    el.g2Text.textContent = 'Cel: ' + state.followers + '/' + state.goal + ' followów';
     el.g2Percent.textContent = percent + '%';
+    setProgress(percent);
+  }
+
+  // Wypełnienie G2; przy 0% bez kreski na krawędzi
+  function setProgress(percent) {
     el.g2Progress.style.width = percent + '%';
+    el.g2Progress.classList.toggle('is-empty', percent === 0);
   }
 
   // G3: nick ostatniego followa; flash = błysk morelowy

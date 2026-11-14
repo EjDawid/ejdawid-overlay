@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.4, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`.
+Wersja 1.6, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -19,11 +19,11 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 | ID | Element | Gdzie | Kto robi |
 | --- | --- | --- | --- |
 | G1 | Kamerka: sylwetka z greenscreenu, bez podłoża, „siedzi” na pasku G2 | scena Gra | OBS (Chroma Key) |
-| G2 | Pasek celu followów, jedna linia: „Cel: 32/50 followów  64%”, cienki koralowy pasek postępu przy dolnej krawędzi; po osiągnięciu celu „Cel osiągnięty ★” | kolumna | kod |
+| G2 | Pasek celu followów, jedna linia: „Cel: 32/50 followów  64%”, koralowe wypełnienie na całą wysokość środka paska rośnie od lewej z postępem (z cienką ciemną kreską na końcu), procent przy prawej krawędzi; po osiągnięciu celu „Cel osiągnięty ★” | kolumna | kod |
 | G3 | Pasek „Ostatni follow: nick”; przy nowym followie błysk morelowy i podmiana nicku | kolumna | kod |
 | G4 | Pasek „Napiwki: nick · kwota” z wyróżnionym największym | pod kolumną | widżet Tipply |
-| G5 | Naszywka followa: zaokrąglona kremowa łatka z ciemnym przerywanym ściegiem, „NOWY FOLLOW!” + nick; też bits poniżej progu („X BITSÓW” + nick). Wzór: `docs/ref/naszywka-follow.png` | obok kamerki | kod |
-| G6 | Karta zdarzenia: sub, resub, gift (pojedynczy i paczka), bits od progu, raid; różowa kartka z „podartymi” rogami, hasło + nick + liczba + wiadomość. Wzór: `docs/ref/karta-zdarzenia.png` | obok kolumny, na wysokości pasków | kod |
+| G5 | Naszywka followa: kremowa łatka w kształcie tarczy, z ciemnym przerywanym ściegiem i kłoskami po bokach, „NOWY FOLLOW!” + nick; też bits poniżej progu („X BITSÓW” + nick). Wzór: `docs/ref/wyciete/naszywka-follow.png` | obok kamerki | kod |
+| G6 | Karta zdarzenia: sub, resub, gift (pojedynczy i paczka), bits od progu, raid; różowa kartka z „podartymi” rogami, hasło + nick + liczba + wiadomość. Wzór: `docs/ref/wyciete/karta-zdarzenia.png` | obok kolumny, na wysokości pasków | kod |
 | G7 | Karta donate z lektorem | obok kolumny, pod G6 | widżet Tipply |
 | G9 | Skrót „schowaj wszystko” (overlay, kamerka, widżety Tipply). Gdy gra coś zasłania, Dawid ręcznie przesuwa kamerkę w OBS | OBS | OBS Hotkeys |
 | E1 | Scena chaty: gotowa ilustracja `img/scena-chaty.png`, statyczna | ekrany | obraz |
@@ -41,18 +41,19 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 
 ## 3. Wygląd [D]
 
-- Paleta: krem papieru `#F3E3BF` (tło pasków i naszywki, taśma), morela `#E4BC7F` (cień naszywki, błysk G3), koral `#E08364` (pasek postępu), przygaszony róż `#9D585B` (cienie pasków, cień karty), róż karty `#B5686B` (tło G6, do potwierdzenia pipetą z `docs/ref/karta-zdarzenia.png`), morski `#2C4D54` (czat, pastylka, nick na naszywce), atrament `#1F0C01` (kontur, tekst, cień hasła), śliwka `#6A2E30` (wartości na paskach), ciemny brąz `#3B2314` (litery taśmy).
+- Paleta: krem papieru `#F3E3BF` (tło naszywki, taśma), krem pasków `#EDDAAA` (środek pasków G2/G3), biała obwódka `#F2F1E8` (ramka pasków), tekst pasków `#3A1828`, morela `#E4BC7F` (cień naszywki, błysk G3), koral `#EF7B62` (wypełnienie postępu, pipeta ze wzoru), przygaszony róż `#9D585B` (cienie pasków, cień karty), róż karty `#B5686B` (tło G6, do potwierdzenia pipetą z `docs/ref/wyciete/karta-zdarzenia.png`), morski `#2C4D54` (czat, pastylka, nick na naszywce), atrament `#1F0C01` (kontur, tekst, cień hasła), śliwka `#6A2E30`, ciemny brąz `#3B2314` (litery taśmy).
 - Scena chaty: gotowa ilustracja, bez własnego rysowania.
 - Kroje: Alfa Slab One (hasła alertów: na karcie kremowe z atramentowym cieniem w prawo-dół, na naszywce atramentowe bez cienia; taśma), Bree Serif (wszystko inne). Oba z Google Fonts, subset `latin-ext`.
 - Kontur 4–5 px atramentem na każdym elemencie. Cień twardy, bez rozmycia, w prawo-dół.
-- Kształty kanciaste: paski, karta, czat, pastylka bez zaokrągleń (`border-radius: 0`). Jedyny zaokrąglony element: naszywka G5 (ok. 18 px).
+- Paski G2/G3 (wzór: `docs/ref/wyciete/pasek-cel.png`, `pasek-ostatni-follow.png`): cienki atramentowy brzeg (2 px), gruba biała obwódka (ok. 7 px), cienka atramentowa linia (2 px), kremowy środek; cień atramentowy 2 px w prawo i 4 px w dół. Tekst jednym kolorem, lekko pogrubiony. G3: tekst wyśrodkowany, mała gwiazdka w konturze w prawym dolnym rogu.
+- Kształty kanciaste: paski, karta, czat, pastylka bez zaokrągleń (`border-radius: 0`). Jedyny element bez prostych rogów: naszywka G5 w kształcie tarczy.
 - Ruch alertów: wejście pieczątką (ok. 1 s), kołysanie jak na jednej pinezce, wyjście zmięciem. Paski bez animacji poza błyskiem G3.
 - Bez gradientów, bez poświaty, bez rozmytych cieni, bez elementów Gravity Falls (postaci, symboli, logo).
 
 ## 4. Układ na ekranie 1920×1080 [D]
 
 - Kolumna: 360 px szerokości, lewy margines 40 px, wyśrodkowana w pionie. Od góry: G1 (sylwetka, ok. 200 px wysokości), G2 (60 px), odstęp 20 px, G3 (60 px), odstęp 20 px, G4 Tipply (60 px).
-- G5 naszywka: 280×96 px, przy prawym górnym rogu kamerki, obrót −6°.
+- G5 naszywka (tarcza): ok. 200×175 px, przy prawym górnym rogu kamerki, obrót −6°. Rozmiar do potwierdzenia w OBS.
 - G6 karta: 440×190 px, 60 px na prawo od kolumny, na wysokości pasków, obrót −2°. G7 Tipply: 440×110 px, 30 px pod G6.
 - Ekrany: ilustracja na całym ekranie; taśma E2 ukośna (−6°) w górnej 1/4; czat E3 460×620 px przy prawej krawędzi (margines 60 px, y≈300–920); alerty w prześwicie nieba x≈1050–1420, y≈320–620; pastylka E7 (tylko koniec) wyśrodkowana na dole (ok. 36 px od dolnej krawędzi).
 - Niczego na środku ekranu i nigdy na dolnych 120 px (pasek przedmiotów gry).
