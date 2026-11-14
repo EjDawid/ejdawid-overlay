@@ -1,0 +1,63 @@
+/* EjDawid overlay – cały wygląd. Spec: docs/spec-overlay.md */
+
+/* Paleta, fonty, kontury, cienie (spec, sekcja 3) */
+:root {
+  --cream: #F3E3BF;      /* krem papieru */
+  --apricot: #E4BC7F;    /* morela */
+  --coral: #E08364;      /* koral */
+  --rose-dim: #9D585B;   /* przygaszony róż */
+  --rose-card: #B5686B;  /* róż karty */
+  --sea: #2C4D54;        /* morski */
+  --ink: #1F0C01;        /* atrament */
+  --plum: #6A2E30;       /* śliwka */
+  --brown: #3B2314;      /* ciemny brąz */
+
+  --font-head: 'Alfa Slab One', serif;
+  --font-body: 'Bree Serif', serif;
+
+  --outline: 4px solid var(--ink);
+  --shadow: 6px 6px 0 var(--rose-dim);
+}
+
+/* Płótno 1920×1080, przezroczyste */
+#ej-root {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* Kawałek 1: napis testowy „overlay działa” (do usunięcia w kawałku 2) */
+.ej-hello {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  padding: 12px 20px;
+  background: var(--cream);
+  border: var(--outline);
+  border-radius: 0;
+  box-shadow: var(--shadow);
+  font-size: 32px;
+}
+
+.ej-hello-mode {
+  color: var(--plum);
+}
+
+/* Napis debug (?debug=1) w prawym górnym rogu */
+.ej-debug {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  max-width: 700px;
+  padding: 4px 8px;
+  background: var(--ink);
+  color: var(--cream);
+  font: 16px monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

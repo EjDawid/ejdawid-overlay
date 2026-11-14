@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>EjDawid overlay – podgląd</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Bree+Serif&subset=latin-ext&display=swap">
+  <link rel="stylesheet" href="overlay.css">
+  <style>
+    /* Style tylko podglądu, nie trafiają do SE */
+    :root { --preview-bg: #555; --panel-bg: #222; --panel-fg: #eee; }
+    body { margin: 0; background: var(--panel-bg); color: var(--panel-fg); font-family: sans-serif; }
+    .panel { padding: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .panel button { font-size: 14px; padding: 6px 10px; cursor: pointer; }
+    /* Płótno 1920×1080 pomniejszone o połowę */
+    .stage-wrap { width: 960px; height: 540px; margin: 0 10px; outline: 1px dashed var(--panel-fg); }
+    .stage { position: relative; width: 1920px; height: 1080px; transform: scale(0.5); transform-origin: 0 0; background: var(--preview-bg); }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <strong>Tryb (onWidgetLoad):</strong>
+    <button data-mode="gra">gra</button>
+    <button data-mode="start">start</button>
+    <button data-mode="przerwa">przerwa</button>
+    <button data-mode="koniec">koniec</button>
+  </div>
+  <div class="stage-wrap">
+    <div class="stage"><div id="ej-root"></div></div>
+  </div>
+
+  <script>
+    // Ten sam bufor i nasłuch co w se/loader.html
+    window.EjOverlayQueue = [];
+    ['onWidgetLoad', 'onEventReceived', 'onSessionUpdate'].forEach(function (type) {
+      window.addEventListener(type, function (obj) {
+        if (window.EjOverlay) window.EjOverlay.handle(type, obj.detail);
+        else if (window.EjOverlayQueue) window.EjOverlayQueue.push([type, obj.detail]);
+      });
+    });
+
+    // Symulacja SE: onWidgetLoad z fieldData
+    function widgetLoad(mode) {
+      window.dispatchEvent(new CustomEvent('onWidgetLoad', {
+        detail: { fieldData: { mode: mode }, session: { data: {} } }
+      }));
+    }
+    document.querySelectorAll('[data-mode]').forEach(function (btn) {
+      btn.addEventListener('click', function () { widgetLoad(btn.dataset.mode); });
+    });
+    widgetLoad('gra');
+  </script>
+  <script src="overlay.js?debug=1"></script>
+</body>
+</html>
