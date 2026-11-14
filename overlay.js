@@ -61,6 +61,19 @@
     return num(state.fields[name], fallback);
   }
 
+  // Długi tekst: zmniejsza czcionkę do minSize; jeśli dalej się nie mieści
+  // i wrap = true, zawija do 2 linii (klasa .is-wrap). Element musi być już w DOM.
+  function fitText(node, maxSize, minSize, wrap) {
+    node.classList.remove('is-wrap');
+    let size = maxSize;
+    node.style.fontSize = size + 'px';
+    while (node.scrollWidth > node.clientWidth && size > minSize) {
+      size -= 1;
+      node.style.fontSize = size + 'px';
+    }
+    if (wrap && node.scrollWidth > node.clientWidth) node.classList.add('is-wrap');
+  }
+
   // Słowa typu „Cheer100” z wiadomości bitsów
   function stripCheers(text) {
     return text.replace(/(^|\s)[a-z]+\d+(?=\s|$)/gi, ' ').replace(/\s+/g, ' ').trim();
@@ -183,9 +196,16 @@
     el.g2Progress.classList.toggle('is-empty', percent === 0);
   }
 
-  // G3: nick ostatniego followa
+  // G3: nick ostatniego followa; długi nick zmniejsza czcionkę całego paska (22 -> 14 px)
   function renderLatest() {
     el.g3Nick.textContent = state.latestFollower || NO_FOLLOWER;
+    const inner = el.g3Nick.parentNode;
+    let size = 22;
+    inner.style.fontSize = size + 'px';
+    while (el.g3Nick.scrollWidth > el.g3Nick.clientWidth && size > 14) {
+      size -= 1;
+      inner.style.fontSize = size + 'px';
+    }
   }
 
   // Błysk morelowy G3
@@ -216,6 +236,9 @@
     holder.appendChild(alert.node);
     alert.node.classList.add('is-in');
     slot.appendChild(holder);
+    // długie nicki: mniejsza czcionka, w ostateczności 2 linie
+    alert.node.querySelectorAll('.g5-nick').forEach((n) => fitText(n, 22, 15, true));
+    alert.node.querySelectorAll('.g6-line').forEach((n) => fitText(n, 24, 17, true));
     playSound(alert.sound);
     if (alert.onShow) alert.onShow();
 
@@ -384,6 +407,9 @@
   setMode('gra');
   renderGoal();
   renderLatest();
+
+  // po wczytaniu fontów przelicz dopasowanie G3
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(renderLatest);
 
   window.EjOverlay = { handle };
 

@@ -318,6 +318,7 @@ body:not(.mode-gra) .g6-slot {
   position: relative; /* nad przetartymi rogami */
   z-index: 1;
   flex: 1;
+  min-width: 0; /* długi tekst nie rozpycha panelu poza kartę */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -356,6 +357,17 @@ body:not(.mode-gra) .g6-slot {
   font-size: 18px;
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+
+/* Długi nick, który nie zmieścił się nawet po zmniejszeniu czcionki: 2 linie (overlay.js fitText) */
+.g5-nick.is-wrap,
+.g6-line.is-wrap {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.1;
 }
 
 /* Napis debug (?debug=1) w prawym górnym rogu */

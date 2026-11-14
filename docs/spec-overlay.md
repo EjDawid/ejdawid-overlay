@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.9, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
+Wersja 1.10, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -55,7 +55,7 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 
 - Kolumna: 360 px szerokości, lewy margines 40 px, wyśrodkowana w pionie. Od góry: G1 (sylwetka, ok. 200 px wysokości), G2 (60 px), odstęp 20 px, G3 (60 px), odstęp 20 px, G4 Tipply (60 px).
 - G5 naszywka (tarcza): ok. 200×175 px, przy prawym górnym rogu kamerki, obrót −6°. Rozmiar do potwierdzenia w OBS.
-- G6 karta: 440×190–215 px (wysokość zależy od tekstu), 60 px na prawo od kolumny, na wysokości pasków (od y=530), obrót −2°. G7 Tipply: 440×110 px, 30 px pod najwyższą kartą, czyli od y≈775.
+- G6 karta: 440×190–220 px (wysokość zależy od tekstu), 60 px na prawo od kolumny, na wysokości pasków (od y=530), obrót −2°. G7 Tipply: 440×110 px, 30 px pod najwyższą kartą, czyli od y≈775.
 - Ekrany: ilustracja na całym ekranie; taśma E2 ukośna (−6°) w górnej 1/4; czat E3 460×620 px przy prawej krawędzi (margines 60 px, y≈300–920); alerty w prześwicie nieba x≈1050–1420, y≈320–620; pastylka E7 (tylko koniec) wyśrodkowana na dole (ok. 36 px od dolnej krawędzi).
 - Niczego na środku ekranu i nigdy na dolnych 120 px (pasek przedmiotów gry).
 
@@ -95,6 +95,7 @@ Reguły:
 - Teksty (zatwierdzone przez Dawida): sub „DZIĘKI ZA SUB!” + nick; resub „DZIĘKI ZA SUB!” + „nick · X. miesiąc” + wiadomość; gift „SUB W PREZENCIE!” + „od {sender} dla {name}”; paczka „X SUBÓW DLA CZATU!” + „od {sender}”; bits od progu „DZIĘKI ZA BITSY!” + „nick · X bitsów” + wiadomość (bez słów `Cheer100`); raid „DZIĘKI ZA RAID!” + „nick · X widzów”; naszywka „NOWY FOLLOW!” + nick, bits poniżej progu „X BITSÓW” + nick. Liczebniki odmieniane (1 sub, 2 suby, 5 subów).
 - Czat: ostatnie 30 wiadomości w DOM, starsze usuwane; emotki zamieniane na `<img>` z `urls["2"]`; tekst wstawiany jako tekst (nigdy innerHTML z treści widza).
 - Brak danych na starcie (np. `follower-latest` puste): G3 pokazuje „jeszcze nikt”.
+- Długie nicki (Twitch: do 25 znaków): G3 zmniejsza czcionkę paska (22→14 px), na końcu „…”; G5 nick 22→15 px, potem 2 linie; G6 linia z nickiem 24→17 px, potem 2 linie. Nic nie wychodzi poza element.
 
 ## 7. Architektura [CC]
 
