@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.6, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
+Wersja 1.7, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -41,7 +41,7 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 
 ## 3. Wygląd [D]
 
-- Paleta: krem papieru `#F3E3BF` (tło naszywki, taśma), krem pasków `#EDDAAA` (środek pasków G2/G3), biała obwódka `#F2F1E8` (ramka pasków), tekst pasków `#3A1828`, morela `#E4BC7F` (cień naszywki, błysk G3), koral `#EF7B62` (wypełnienie postępu, pipeta ze wzoru), przygaszony róż `#9D585B` (cienie pasków, cień karty), róż karty `#B5686B` (tło G6, do potwierdzenia pipetą z `docs/ref/wyciete/karta-zdarzenia.png`), morski `#2C4D54` (czat, pastylka, nick na naszywce), atrament `#1F0C01` (kontur, tekst, cień hasła), śliwka `#6A2E30`, ciemny brąz `#3B2314` (litery taśmy).
+- Paleta: krem papieru `#F3E3BF` (tło naszywki, taśma), krem pasków `#EDDAAA` (środek pasków G2/G3), biała obwódka `#F2F1E8` (ramka pasków), tekst pasków `#3A1828`, morela `#E4BC7F` (cień naszywki, błysk G3), koral `#EF7B62` (wypełnienie postępu, pipeta ze wzoru), przygaszony róż `#9D585B` (cienie pasków, cień karty), panel karty `#995558` (tło G6, pipeta ze wzoru), różowa kartka pod spodem `#D19289`, papier karty `#F0D5A5`, brzeg tarczy G5 `#C59F5A`, morski `#2C4D54` (czat, pastylka, nick na naszywce), atrament `#1F0C01` (kontur, tekst, cień hasła), śliwka `#6A2E30`, ciemny brąz `#3B2314` (litery taśmy).
 - Scena chaty: gotowa ilustracja, bez własnego rysowania.
 - Kroje: Alfa Slab One (hasła alertów: na karcie kremowe z atramentowym cieniem w prawo-dół, na naszywce atramentowe bez cienia; taśma), Bree Serif (wszystko inne). Oba z Google Fonts, subset `latin-ext`.
 - Kontur 4–5 px atramentem na każdym elemencie. Cień twardy, bez rozmycia, w prawo-dół.
@@ -91,6 +91,7 @@ Reguły:
 - `bulkGifted === true` → jedna karta „X subów dla czatu” (`sender`, `amount`); zdarzenia z `isCommunityGift === true` pomijane.
 - `gifted === true` bez `bulkGifted` → karta „SUB OD {sender} DLA {name}”.
 - Raid: karta „DZIĘKI ZA RAID!” + `name` + `amount` widzów.
+- Teksty (zatwierdzone przez Dawida): sub „DZIĘKI ZA SUB!” + nick; resub „DZIĘKI ZA SUB!” + „nick · X. miesiąc” + wiadomość; gift „SUB W PREZENCIE!” + „od {sender} dla {name}”; paczka „X SUBÓW DLA CZATU!” + „od {sender}”; bits od progu „DZIĘKI ZA BITSY!” + „nick · X bitsów” + wiadomość (bez słów `Cheer100`); raid „DZIĘKI ZA RAID!” + „nick · X widzów”; naszywka „NOWY FOLLOW!” + nick, bits poniżej progu „X BITSÓW” + nick. Liczebniki odmieniane (1 sub, 2 suby, 5 subów).
 - Czat: ostatnie 30 wiadomości w DOM, starsze usuwane; emotki zamieniane na `<img>` z `urls["2"]`; tekst wstawiany jako tekst (nigdy innerHTML z treści widza).
 - Brak danych na starcie (np. `follower-latest` puste): G3 pokazuje „jeszcze nikt”.
 
@@ -111,7 +112,7 @@ OBS Browser Source: widżety Tipply (G4, G7), osobne adresy
 - Ilustracja chaty: `img/scena-chaty.png` (ok. 2,4 MB; rozważyć WebP), statyczna.
 - Bez zewnętrznych bibliotek (jQuery jest w SE, ale go nie używamy). Czysty JS, CSS animations.
 - Sandbox SE: brak `console.log`; debug przez `?debug=1` w parametrze loadera wyświetlający ostatnie zdarzenie w rogu.
-- Dźwięki: pliki `.ogg` w repo (`sounds/`), odtwarzane przez `Audio`; adresy wybrane z pól `sound-input` SE mają pierwszeństwo, jeśli ustawione.
+- Dźwięki: tylko z pól `sound-input` SE (Dawid wybiera lub wgrywa plik w SE), odtwarzane przez `Audio`; puste pole = bez dźwięku. Brak plików dźwiękowych w repo.
 
 ## 8. Pola widgetu (Fields) [CC]
 
@@ -122,8 +123,8 @@ OBS Browser Source: widżety Tipply (G4, G7), osobne adresy
 | `badgeSeconds` | number | 4 | G5 |
 | `cardSeconds` | number | 7 | G6 |
 | `bitsThreshold` | number | 100 | G5/G6 |
-| `soundFollow` | sound-input | pusty (plik z repo) | G5 |
-| `soundCard` | sound-input | pusty (plik z repo) | G6 |
+| `soundFollow` | sound-input | pusty (cisza) | G5 |
+| `soundCard` | sound-input | pusty (cisza) | G6 |
 | `testFollow`, `testSub`, `testGift`, `testBits`, `testRaid`, `testChat` | button | — | W2 |
 | `widgetDuration` | hidden | 8 | kolejka |
 | `widgetName` | hidden | „EjDawid overlay” | — |
@@ -141,7 +142,6 @@ ejdawid-overlay/
   se/loader.html         HTML do wklejenia w Custom Widget
   se/fields.json         Fields do wklejenia
   img/                   scena chaty, symbol
-  sounds/
 ```
 
 GitHub Pages z gałęzi `main`, katalog główny. Adresy: `https://<konto>.github.io/ejdawid-overlay/overlay.js`.

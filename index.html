@@ -36,6 +36,25 @@
     <button id="follow">Nowy follow</button>
     <button id="longnick">Follow z długim nickiem</button>
   </div>
+  <div class="panel">
+    <strong>Alerty:</strong>
+    <button data-ev="sub">Sub</button>
+    <button data-ev="resub">Resub + wiadomość</button>
+    <button data-ev="gift">Gift pojedynczy</button>
+    <button data-ev="bulk">Paczka 5 giftów</button>
+    <button data-ev="bitsSmall">50 bitsów</button>
+    <button data-ev="bitsBig">500 bitsów</button>
+    <button data-ev="raid">Raid</button>
+    <button data-ev="burst">3 naraz</button>
+  </div>
+  <div class="panel">
+    <strong>Przyciski SE (W2):</strong>
+    <button data-test="testFollow">testFollow</button>
+    <button data-test="testSub">testSub</button>
+    <button data-test="testGift">testGift</button>
+    <button data-test="testBits">testBits</button>
+    <button data-test="testRaid">testRaid</button>
+  </div>
   <div class="stage-wrap">
     <div class="stage">
       <div class="guide" style="left:40px;top:330px;width:360px;height:200px">G1 kamerka (OBS)</div>
@@ -65,7 +84,10 @@
     }
     function widgetLoad() {
       emit('onWidgetLoad', {
-        fieldData: { mode: sim.mode, followGoal: Number(document.getElementById('goal').value) },
+        fieldData: {
+          mode: sim.mode, followGoal: Number(document.getElementById('goal').value),
+          badgeSeconds: 4, cardSeconds: 7, bitsThreshold: 100, soundFollow: '', soundCard: ''
+        },
         session: { data: session() }
       });
     }
@@ -89,6 +111,29 @@
       follow(nicks[Math.floor(Math.random() * nicks.length)]);
     };
     document.getElementById('longnick').onclick = function () { follow('BardzoDlugiNickWidza_12345'); };
+
+    // Zdarzenia alertów w kształcie jak z SE (spec 6)
+    function ev(listener, event) { emit('onEventReceived', { listener: listener, event: event }); }
+    var events = {
+      sub: function () { ev('subscriber-latest', { name: 'kasia_m', amount: 1, tier: '1000', message: '' }); },
+      resub: function () { ev('subscriber-latest', { name: 'bartek99', amount: 5, tier: '1000', message: 'Pięć miesięcy z chatą w lesie, pozdro Dawid! Długa wiadomość, żeby sprawdzić zawijanie i obcinanie tekstu na karcie.' }); },
+      gift: function () { ev('subscriber-latest', { name: 'ola', sender: 'zielony_lis', amount: 1, gifted: true }); },
+      bulk: function () {
+        ev('subscriber-latest', { name: 'zielony_lis', sender: 'zielony_lis', amount: 5, bulkGifted: true });
+        // pojedyncze suby z paczki: mają zostać pominięte
+        for (var i = 0; i < 5; i++) ev('subscriber-latest', { name: 'widz' + i, sender: 'zielony_lis', amount: 1, gifted: true, isCommunityGift: true });
+      },
+      bitsSmall: function () { ev('cheer-latest', { name: 'ola', amount: 50, message: 'Cheer50 hej' }); },
+      bitsBig: function () { ev('cheer-latest', { name: 'Żółw_Łódź', amount: 500, message: 'Cheer500 za budowę!' }); },
+      raid: function () { ev('raid-latest', { name: 'sasiad_streamer', amount: 12 }); },
+      burst: function () { events.sub(); follow('ola'); events.raid(); }
+    };
+    document.querySelectorAll('[data-ev]').forEach(function (btn) {
+      btn.addEventListener('click', function () { events[btn.dataset.ev](); });
+    });
+    document.querySelectorAll('[data-test]').forEach(function (btn) {
+      btn.addEventListener('click', function () { ev('widget-button', { field: btn.dataset.test, value: '' }); });
+    });
     widgetLoad();
   </script>
   <script src="overlay.js?debug=1"></script>

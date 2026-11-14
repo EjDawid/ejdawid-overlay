@@ -8,12 +8,87 @@
       "start": "Start",
       "przerwa": "Przerwa",
       "koniec": "Koniec"
-    }
+    },
+    "group": "Ustawienia"
   },
   "followGoal": {
     "type": "number",
     "label": "Cel followów",
     "value": 100,
-    "min": 1
+    "min": 1,
+    "group": "Ustawienia"
+  },
+  "badgeSeconds": {
+    "type": "number",
+    "label": "Czas naszywki (s)",
+    "value": 4,
+    "min": 2,
+    "max": 20,
+    "group": "Ustawienia"
+  },
+  "cardSeconds": {
+    "type": "number",
+    "label": "Czas karty (s)",
+    "value": 7,
+    "min": 3,
+    "max": 30,
+    "group": "Ustawienia"
+  },
+  "bitsThreshold": {
+    "type": "number",
+    "label": "Próg bitsów dla karty",
+    "value": 100,
+    "min": 1,
+    "group": "Ustawienia"
+  },
+  "soundFollow": {
+    "type": "sound-input",
+    "label": "Dźwięk followa i małych bitsów",
+    "value": "",
+    "group": "Dźwięki"
+  },
+  "soundCard": {
+    "type": "sound-input",
+    "label": "Dźwięk karty (sub, gift, bits, raid)",
+    "value": "",
+    "group": "Dźwięki"
+  },
+  "testFollow": {
+    "type": "button",
+    "label": "Test: follow",
+    "value": "follow",
+    "group": "Testy"
+  },
+  "testSub": {
+    "type": "button",
+    "label": "Test: sub (5. miesiąc)",
+    "value": "sub",
+    "group": "Testy"
+  },
+  "testGift": {
+    "type": "button",
+    "label": "Test: paczka 5 subów",
+    "value": "gift",
+    "group": "Testy"
+  },
+  "testBits": {
+    "type": "button",
+    "label": "Test: bitsy (na zmianę mało/dużo)",
+    "value": "bits",
+    "group": "Testy"
+  },
+  "testRaid": {
+    "type": "button",
+    "label": "Test: raid",
+    "value": "raid",
+    "group": "Testy"
+  },
+  "widgetDuration": {
+    "type": "hidden",
+    "value": 8
+  },
+  "widgetName": {
+    "type": "hidden",
+    "value": "EjDawid overlay"
   }
 }

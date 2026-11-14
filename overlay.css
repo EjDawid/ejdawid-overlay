@@ -14,6 +14,10 @@
   --paper-white: #F2F1E8; /* biała obwódka pasków (wzór: docs/ref/wyciete/pasek-*.png) */
   --bar-cream: #EDDAAA;  /* kremowy środek pasków, wg wzoru */
   --bar-text: #3A1828;   /* tekst pasków, ciemna śliwka wg wzoru */
+  --badge-rim: #C59F5A;  /* brzeg tarczy G5 (wzór: docs/ref/arkusz-elementow.png) */
+  --card-panel: #995558; /* panel karty G6, pipeta ze wzoru */
+  --card-back: #D19289;  /* różowa kartka pod spodem G6 */
+  --card-paper: #F0D5A5; /* papier karty G6 */
 
   --font-head: 'Alfa Slab One', serif;
   --font-body: 'Bree Serif', serif;
@@ -140,6 +144,225 @@ body.mode-gra .g-column {
 @keyframes g3-flash {
   0%, 30% { background: var(--apricot); }
   100% { background: var(--bar-cream); }
+}
+
+/* ---------- Alerty: miejsca (spec 4) ---------- */
+.ej-slot {
+  position: absolute;
+}
+
+/* Gra: G5 przy prawym górnym rogu kamerki (kamerka: x 40–400, y 330–530), obrót −6° */
+.g5-slot {
+  left: 320px;
+  top: 215px;
+  transform: rotate(-6deg);
+}
+
+/* Gra: G6 60 px na prawo od kolumny, na wysokości pasków, obrót −2° */
+.g6-slot {
+  left: 460px;
+  top: 530px;
+  transform: rotate(-2deg);
+}
+
+/* Ekrany: prześwit nieba x≈1050–1420, y≈320–620 (spec 4, E4) */
+body:not(.mode-gra) .g5-slot {
+  left: 1135px;
+  top: 380px;
+}
+
+body:not(.mode-gra) .g6-slot {
+  left: 1048px;
+  top: 390px;
+  transform: rotate(-2deg) scale(0.85);
+  transform-origin: 0 0;
+}
+
+/* ---------- Ruch alertów (spec 3) ----------
+   .ej-alert: kołysanie jak na jednej pinezce (oś na górze)
+   .is-in: wejście pieczątką, .is-out: wyjście zmięciem */
+.ej-alert {
+  transform-origin: 50% 0;
+  animation: ej-swing 2.6s ease-in-out 0.9s infinite;
+}
+
+.is-in {
+  animation: ej-stamp 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+}
+
+.is-out {
+  animation: ej-crumple 0.7s ease-in both; /* czas = EXIT_MS w overlay.js */
+}
+
+@keyframes ej-stamp {
+  0% { transform: scale(1.8); opacity: 0; }
+  45% { transform: scale(0.92); opacity: 1; }
+  70% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ej-swing {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(2.5deg); }
+}
+
+@keyframes ej-crumple {
+  0% { transform: none; opacity: 1; }
+  40% { transform: scale(0.85, 0.7) rotate(6deg) skew(8deg); opacity: 1; }
+  100% { transform: scale(0.05) rotate(30deg) skew(20deg); opacity: 0; }
+}
+
+/* ---------- G5: naszywka-tarcza 200×175 ---------- */
+.g5-badge {
+  position: relative;
+  width: 200px;
+  height: 175px;
+}
+
+.g5-shape {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.g5-rim {
+  fill: var(--badge-rim);
+  stroke: var(--ink);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+.g5-field {
+  fill: var(--cream);
+}
+
+.g5-stitch {
+  fill: none;
+  stroke: var(--brown);
+  stroke-width: 3.4; /* po skalowaniu ok. 2,7 px */
+  stroke-dasharray: 9 6;
+}
+
+.g5-wheat path {
+  fill: none;
+  stroke: var(--brown);
+  stroke-width: 2;
+}
+
+.g5-wheat ellipse {
+  fill: var(--brown);
+}
+
+.g5-text {
+  position: absolute;
+  left: 36px;
+  right: 36px;
+  top: 32px;
+  bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.g5-headline {
+  font-family: var(--font-head);
+  font-size: 21px;
+  line-height: 1.05;
+  color: var(--ink);
+}
+
+.g5-nick {
+  max-width: 100%;
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 22px;
+  color: var(--sea);
+  -webkit-text-stroke: 0.5px var(--sea);
+}
+
+/* ---------- G6: karta zdarzenia 440×190 ---------- */
+.g6-card {
+  position: relative;
+  width: 440px;
+  min-height: 190px;
+  /* kontur 2 px i twardy cień idą za kształtem z podartymi rogami */
+  filter:
+    drop-shadow(2px 0 0 var(--ink)) drop-shadow(-2px 0 0 var(--ink))
+    drop-shadow(0 2px 0 var(--ink)) drop-shadow(0 -2px 0 var(--ink))
+    drop-shadow(3px 4px 0 var(--ink));
+}
+
+/* „Podarte” rogi: ząbkowane ścięcia */
+.g6-back,
+.g6-paper {
+  clip-path: polygon(
+    14px 0, 22px 5px, 30px 0, calc(100% - 26px) 0, calc(100% - 18px) 6px, calc(100% - 10px) 0, 100% 12px,
+    100% calc(100% - 20px), calc(100% - 6px) calc(100% - 12px), 100% calc(100% - 6px), calc(100% - 16px) 100%,
+    24px 100%, 16px calc(100% - 6px), 8px 100%, 0 calc(100% - 14px),
+    0 22px, 6px 14px, 0 8px
+  );
+}
+
+.g6-back {
+  position: absolute;
+  inset: 0;
+  background: var(--card-back);
+  transform: rotate(2.5deg) translate(6px, 6px);
+}
+
+.g6-paper {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 190px;
+  padding: 16px;
+  background: var(--card-paper);
+  display: flex;
+}
+
+.g6-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--card-panel);
+  border: 2px solid var(--ink);
+  text-align: center;
+  color: var(--cream);
+}
+
+.g6-headline {
+  font-family: var(--font-head);
+  font-size: 34px;
+  line-height: 1.05;
+  color: var(--cream);
+  text-shadow: 3px 3px 0 var(--ink);
+}
+
+.g6-line {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 24px;
+  -webkit-text-stroke: 0.5px var(--cream);
+}
+
+.g6-message {
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 18px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 /* Napis debug (?debug=1) w prawym górnym rogu */
