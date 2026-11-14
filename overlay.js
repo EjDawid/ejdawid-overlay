@@ -6,7 +6,7 @@
   const MODES = ['gra', 'start', 'przerwa', 'koniec'];
   const DEFAULT_GOAL = 100;
   const NO_FOLLOWER = 'jeszcze nikt';
-  const EXIT_MS = 700; // czas animacji wyjścia (zmięcie), jak w overlay.css
+  const EXIT_MS = 700; // czas animacji wyjścia (odwrócona pieczątka), jak w overlay.css
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ?debug=1 w adresie skryptu włącza napis z ostatnim zdarzeniem
@@ -161,7 +161,7 @@
     document.body.classList.add('mode-' + state.mode);
   }
 
-  // G2: „Cel: 32/50 followów  64%” albo „Cel osiągnięty ★”
+  // G2: „Cel followów: 32/50” + „64%” po prawej, albo „Cel osiągnięty ★”
   function renderGoal() {
     if (state.followers >= state.goal) state.goalReached = true;
 
@@ -172,7 +172,7 @@
       return;
     }
     const percent = Math.min(100, Math.floor((state.followers / state.goal) * 100));
-    el.g2Text.textContent = 'Cel: ' + state.followers + '/' + state.goal + ' followów';
+    el.g2Text.textContent = 'Cel followów: ' + state.followers + '/' + state.goal;
     el.g2Percent.textContent = percent + '%';
     setProgress(percent);
   }
@@ -211,7 +211,7 @@
     }
     state.busy = true;
     const slot = alert.kind === 'badge' ? el.g5Slot : el.g6Slot;
-    // warstwy: .ej-alert (pinezka, kołysanie) > node (pieczątka, zmięcie)
+    // warstwy: .ej-alert (pojemnik) > node (animacje pieczątki)
     const holder = make('div', 'ej-alert');
     holder.appendChild(alert.node);
     alert.node.classList.add('is-in');

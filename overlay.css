@@ -18,6 +18,7 @@
   --card-panel: #995558; /* panel karty G6, pipeta ze wzoru */
   --card-back: #D19289;  /* różowa kartka pod spodem G6 */
   --card-paper: #F0D5A5; /* papier karty G6 */
+  --card-stain: #C8A87C; /* przetarte rogi papieru G6 */
 
   --font-head: 'Alfa Slab One', serif;
   --font-body: 'Bree Serif', serif;
@@ -112,10 +113,6 @@ body.mode-gra .g-column {
   margin-top: 20px;
 }
 
-.g3-follow .ej-bar-inner {
-  justify-content: center;
-}
-
 .g3-label {
   flex: none;
 }
@@ -137,13 +134,14 @@ body.mode-gra .g-column {
   -webkit-text-stroke: 0;
 }
 
+/* Błysk przy nowym followie: 3 mignięcia koralem */
 .g3-follow.is-flash .ej-bar-inner {
-  animation: g3-flash 1.2s ease-out;
+  animation: g3-flash 0.6s ease-in-out 3;
 }
 
 @keyframes g3-flash {
-  0%, 30% { background: var(--apricot); }
-  100% { background: var(--bar-cream); }
+  0%, 100% { background: var(--bar-cream); }
+  35%, 60% { background: var(--coral); }
 }
 
 /* ---------- Alerty: miejsca (spec 4) ---------- */
@@ -179,19 +177,13 @@ body:not(.mode-gra) .g6-slot {
 }
 
 /* ---------- Ruch alertów (spec 3) ----------
-   .ej-alert: kołysanie jak na jednej pinezce (oś na górze)
-   .is-in: wejście pieczątką, .is-out: wyjście zmięciem */
-.ej-alert {
-  transform-origin: 50% 0;
-  animation: ej-swing 2.6s ease-in-out 0.9s infinite;
-}
-
+   .is-in: wejście pieczątką, .is-out: wyjście odwróconą pieczątką; bez kołysania */
 .is-in {
   animation: ej-stamp 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
 .is-out {
-  animation: ej-crumple 0.7s ease-in both; /* czas = EXIT_MS w overlay.js */
+  animation: ej-unstamp 0.7s ease-in both; /* czas = EXIT_MS w overlay.js */
 }
 
 @keyframes ej-stamp {
@@ -201,15 +193,12 @@ body:not(.mode-gra) .g6-slot {
   100% { transform: scale(1); }
 }
 
-@keyframes ej-swing {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(2.5deg); }
-}
-
-@keyframes ej-crumple {
-  0% { transform: none; opacity: 1; }
-  40% { transform: scale(0.85, 0.7) rotate(6deg) skew(8deg); opacity: 1; }
-  100% { transform: scale(0.05) rotate(30deg) skew(20deg); opacity: 0; }
+/* To samo co wejście, od końca */
+@keyframes ej-unstamp {
+  0% { transform: scale(1); opacity: 1; }
+  30% { transform: scale(1.04); }
+  55% { transform: scale(0.92); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
 }
 
 /* ---------- G5: naszywka-tarcza 200×175 ---------- */
@@ -285,45 +274,60 @@ body:not(.mode-gra) .g6-slot {
 }
 
 /* ---------- G6: karta zdarzenia 440×190 ---------- */
+/* Wzór: docs/ref/wyciete/karta-zdarzenia.png – prostokątny papier z cienkim konturem,
+   przetarte (ciemniejsze) rogi: lewy górny i prawy dolny, różowa kartka pod spodem lekko obrócona */
 .g6-card {
   position: relative;
   width: 440px;
   min-height: 190px;
-  /* kontur 2 px i twardy cień idą za kształtem z podartymi rogami */
-  filter:
-    drop-shadow(2px 0 0 var(--ink)) drop-shadow(-2px 0 0 var(--ink))
-    drop-shadow(0 2px 0 var(--ink)) drop-shadow(0 -2px 0 var(--ink))
-    drop-shadow(3px 4px 0 var(--ink));
-}
-
-/* „Podarte” rogi: ząbkowane ścięcia */
-.g6-back,
-.g6-paper {
-  clip-path: polygon(
-    14px 0, 22px 5px, 30px 0, calc(100% - 26px) 0, calc(100% - 18px) 6px, calc(100% - 10px) 0, 100% 12px,
-    100% calc(100% - 20px), calc(100% - 6px) calc(100% - 12px), 100% calc(100% - 6px), calc(100% - 16px) 100%,
-    24px 100%, 16px calc(100% - 6px), 8px 100%, 0 calc(100% - 14px),
-    0 22px, 6px 14px, 0 8px
-  );
 }
 
 .g6-back {
   position: absolute;
   inset: 0;
+  box-sizing: border-box;
   background: var(--card-back);
-  transform: rotate(2.5deg) translate(6px, 6px);
+  border: 2px solid var(--ink);
+  transform: rotate(2deg);
 }
 
 .g6-paper {
   position: relative;
   box-sizing: border-box;
   min-height: 190px;
-  padding: 16px;
+  padding: 18px;
   background: var(--card-paper);
+  border: 2px solid var(--ink);
   display: flex;
 }
 
+/* Przetarte rogi: trójkąty w ciemniejszym kolorze papieru */
+.g6-paper::before,
+.g6-paper::after {
+  content: '';
+  position: absolute;
+  background: var(--card-stain);
+}
+
+.g6-paper::before {
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 52px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.g6-paper::after {
+  right: 0;
+  bottom: 0;
+  width: 44px;
+  height: 40px;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
 .g6-panel {
+  position: relative; /* nad przetartymi rogami */
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -339,8 +343,8 @@ body:not(.mode-gra) .g6-slot {
 
 .g6-headline {
   font-family: var(--font-head);
-  font-size: 34px;
-  line-height: 1.05;
+  font-size: 42px;
+  line-height: 1.02;
   color: var(--cream);
   text-shadow: 3px 3px 0 var(--ink);
 }
@@ -358,7 +362,7 @@ body:not(.mode-gra) .g6-slot {
   max-width: 100%;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1; /* jedna linijka: karta nie rośnie w stronę G7 (Tipply) */
   overflow: hidden;
   font-size: 18px;
   line-height: 1.2;
