@@ -138,10 +138,10 @@ body.mode-gra .g-column {
   position: absolute;
 }
 
-/* Gra: G5 przy prawym górnym rogu kamerki (kamerka: x 40–400, y 330–530), obrót −6° */
+/* Gra: G5 obok głowy, nad prawym ramieniem sylwetki (sylwetka: x≈60–380, głowa do x≈310), obrót −6° */
 .g5-slot {
-  left: 320px;
-  top: 215px;
+  left: 350px;
+  top: 225px;
   transform: rotate(-6deg);
 }
 
