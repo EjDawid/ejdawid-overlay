@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.7, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
+Wersja 1.8, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -106,7 +106,7 @@ OBS Browser Source: widżety Tipply (G4, G7), osobne adresy
 ```
 
 - Jedno repo, jeden `overlay.js` i jeden `overlay.css`; tryb (`gra` / `start` / `przerwa` / `koniec`) przychodzi z `fieldData`.
-- Loader (HTML widgetu w SE, ok. 15 linii): `<link>` do CSS, `<script>` do JS z parametrem wersji (`?v=…`) ustawianym ręcznie przy większych zmianach, żeby ominąć cache GitHub Pages; `window.addEventListener` dla `onWidgetLoad`, `onEventReceived`, `onSessionUpdate` przekazuje `obj.detail` do `window.EjOverlay.handle(...)`. Jeśli skrypt nie wczyta się w 5 s, widget pokazuje w rogu mały napis „overlay offline”.
+- Loader (HTML widgetu w SE, ok. 15 linii): dokłada `<link>` do CSS i `<script>` do JS z parametrem `?t=<czas wczytania>`, więc zawsze pobiera najnowszą wersję z GitHub Pages i po zmianach w kodzie nie trzeba go wklejać od nowa (wystarczy push i ponowne wejście w scenę w OBS); debug przez `DEBUG = true` w loaderze; `window.addEventListener` dla `onWidgetLoad`, `onEventReceived`, `onSessionUpdate` przekazuje `obj.detail` do `window.EjOverlay.handle(...)`. Jeśli skrypt nie wczyta się w 5 s, widget pokazuje w rogu mały napis „overlay offline”.
 - Kolejka alertów: SE dostarcza zdarzenia do widgetu po kolei z czasem `widgetDuration` (pole ukryte, wartość = czas karty + 1 s). Własna kolejka w JS tylko jako zabezpieczenie: jeśli przyjdzie zdarzenie w trakcie animacji, czeka.
 - Fonty: Google Fonts przez `<link>` w loaderze (`Alfa+Slab+One`, `Bree+Serif`, subset `latin-ext`).
 - Ilustracja chaty: `img/scena-chaty.png` (ok. 2,4 MB; rozważyć WebP), statyczna.

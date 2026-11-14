@@ -2,7 +2,7 @@
 
 Overlay streamu Twitch kanału **EjDawid**: paski i alerty w scenie gry oraz trzy ekrany (start, przerwa, koniec). Kod żyje w tym repo, jest serwowany z GitHub Pages i wczytywany do OBS przez Custom Widget w StreamElements (SE).
 
-**Specyfikacja:** `docs/spec-overlay.md` (wersja 1.7). To jest źródło prawdy. Nie dodawaj niczego, czego tam nie ma.
+**Specyfikacja:** `docs/spec-overlay.md` (wersja 1.8). To jest źródło prawdy. Nie dodawaj niczego, czego tam nie ma.
 **Wzory wyglądu:** `docs/ref/*.png` (grafiki Dawida). Przy różnicy między speką a obrazkiem pytaj.
 
 ## Z kim pracujesz
@@ -43,7 +43,7 @@ img/scena-chaty.png      tło ekranów (statyczne)
 - Kształty: **wszystko kanciaste** (`border-radius: 0`), jedyny wyjątek to naszywka G5.
 - Wymiary ze speki, sekcja 4 (płótno 1920×1080).
 - Tryb ekranu z `fieldData.mode` (`gra` / `start` / `przerwa` / `koniec`) ustawia klasę na `<body>`; CSS pokazuje i chowa elementy według klasy.
-- Przy każdej zmianie `overlay.js`/`overlay.css`, którą Dawid ma zobaczyć w OBS: podbij `?v=` w `se/loader.html` i przypomnij, że trzeba wkleić nowy loader w SE albo odświeżyć Browser Source.
+- Loader sam pobiera najnowszy `overlay.js`/`overlay.css` (`?t=<czas>`), więc zmiany w tych plikach nie wymagają wklejania loadera. Po pushu przypomnij: poczekać ok. 1 min na GitHub Pages i odświeżyć Browser Source w OBS. Wklejanie w SE tylko przy zmianie `se/loader.html` albo `se/fields.json` (wtedy powiedz to wprost).
 - Commity małe, po polsku, jeden kawałek = jeden lub kilka commitów. Push na `main` dopiero po teście w `index.html`.
 
 ## Zakazy
@@ -54,7 +54,7 @@ img/scena-chaty.png      tło ekranów (statyczne)
 - Żadnych elementów z Gravity Falls (postaci, symboli, logo), gradientów (poza ilustracją), poświaty, rozmytych cieni.
 - Nic na środku ekranu gry i nic na dolnych 120 px (pasek przedmiotów).
 - Nie dodawaj funkcji z sekcji 10 speki („Poza zakresem”), nawet jeśli wydają się proste.
-- `console.log` nie działa w sandboxie SE: debug przez `?debug=1` w loaderze (napis z ostatnim zdarzeniem w rogu).
+- `console.log` nie działa w sandboxie SE: debug przez `DEBUG = true` w loaderze (napis z ostatnim zdarzeniem w rogu).
 
 ## Kolejność pracy (spec, sekcja 9)
 

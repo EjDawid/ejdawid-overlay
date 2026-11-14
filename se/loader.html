@@ -1,11 +1,15 @@
 <!-- EjDawid overlay – loader (W1). Wklej całość w zakładkę HTML w SE Custom Widget. -->
-<!-- Przy zmianie overlay.js/overlay.css podbij v= w DWÓCH miejscach poniżej. Debug: dopisz &debug=1 do adresu overlay.js. -->
+<!-- Przy każdym wczytaniu pobiera najnowszy overlay.css i overlay.js z GitHub Pages, więc po zmianach w kodzie nie trzeba go wklejać od nowa. -->
+<!-- Debug: zmień DEBUG na true (napis z ostatnim zdarzeniem w rogu). -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Bree+Serif&subset=latin-ext&display=swap">
-<link rel="stylesheet" href="https://ejdawid.github.io/ejdawid-overlay/overlay.css?v=4">
 <div id="ej-root"></div>
 <!-- Widoczne tylko gdy overlay.js się nie wczyta (style tutaj, bo overlay.css mógł też nie dojść) -->
 <div id="ej-offline" style="display:none;position:absolute;right:8px;bottom:128px;padding:2px 6px;background:#1F0C01;color:#F3E3BF;font:14px sans-serif;">overlay offline</div>
 <script>
+  var BASE = 'https://ejdawid.github.io/ejdawid-overlay/';
+  var DEBUG = false;
+  var STAMP = Date.now(); // omija pamięć podręczną: zawsze najnowsza wersja
+
   // Bufor zdarzeń, zanim overlay.js się wczyta
   window.EjOverlayQueue = [];
   ['onWidgetLoad', 'onEventReceived', 'onSessionUpdate'].forEach(function (type) {
@@ -14,8 +18,17 @@
       else if (window.EjOverlayQueue) window.EjOverlayQueue.push([type, obj.detail]);
     });
   });
+
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = BASE + 'overlay.css?t=' + STAMP;
+  document.head.appendChild(css);
+
+  var js = document.createElement('script');
+  js.src = BASE + 'overlay.js?t=' + STAMP + (DEBUG ? '&debug=1' : '');
+  document.body.appendChild(js);
+
   setTimeout(function () {
     if (!window.EjOverlay) document.getElementById('ej-offline').style.display = 'block';
   }, 5000);
 </script>
-<script src="https://ejdawid.github.io/ejdawid-overlay/overlay.js?v=4"></script>
