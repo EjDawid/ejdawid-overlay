@@ -88,7 +88,7 @@
     g2Inner.append(el.g2Progress, el.g2Text, el.g2Percent);
     el.g2.appendChild(g2Inner);
 
-    // G3: ostatni follow (tekst na środku, gwiazdka w rogu z CSS)
+    // G3: ostatni follow (tekst do lewej, jak G2)
     el.g3 = make('div', 'ej-bar g3-follow');
     const g3Inner = make('div', 'ej-bar-inner');
     el.g3Nick = make('span', 'g3-nick');

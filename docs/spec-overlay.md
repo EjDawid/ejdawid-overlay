@@ -45,7 +45,7 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 - Scena chaty: gotowa ilustracja, bez własnego rysowania.
 - Kroje: Alfa Slab One (hasła alertów: na karcie kremowe z atramentowym cieniem w prawo-dół, na naszywce atramentowe bez cienia; taśma), Bree Serif (wszystko inne). Oba z Google Fonts, subset `latin-ext`.
 - Kontur 4–5 px atramentem na każdym elemencie. Cień twardy, bez rozmycia, w prawo-dół.
-- Paski G2/G3 (wzór: `docs/ref/wyciete/pasek-cel.png`, `pasek-ostatni-follow.png`): cienki atramentowy brzeg (2 px), gruba biała obwódka (ok. 7 px), cienka atramentowa linia (2 px), kremowy środek; cień atramentowy 2 px w prawo i 4 px w dół. Tekst jednym kolorem, lekko pogrubiony. G3: tekst do lewej (jak G2), mała gwiazdka w konturze w prawym dolnym rogu.
+- Paski G2/G3 (wzór: `docs/ref/wyciete/pasek-cel.png`, `pasek-ostatni-follow.png`): cienki atramentowy brzeg (2 px), gruba biała obwódka (ok. 7 px), cienka atramentowa linia (2 px), kremowy środek; cień atramentowy 2 px w prawo i 4 px w dół. Tekst jednym kolorem, lekko pogrubiony. G3: tekst do lewej (jak G2), bez gwiazdki.
 - Kształty kanciaste: paski, karta, czat, pastylka bez zaokrągleń (`border-radius: 0`). Jedyny element bez prostych rogów: naszywka G5 w kształcie tarczy.
 - Ruch alertów: wejście pieczątką (ok. 1 s), bez kołysania, wyjście tą samą pieczątką od końca (ok. 0,7 s). Paski bez animacji poza błyskiem G3.
 - Karta G6: prostokątny papier z cienkim atramentowym konturem, ciemniejsze przetarte rogi (lewy górny, prawy dolny), różowa kartka pod spodem obrócona o ok. 2°, w środku różowy panel z konturem; hasło duże (ok. 42 px), może zawinąć się do 2 linii; wiadomość widza w 1 linii.

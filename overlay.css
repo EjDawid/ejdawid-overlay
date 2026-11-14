@@ -123,17 +123,6 @@ body.mode-gra .g-column {
   text-overflow: ellipsis;
 }
 
-/* Gwiazdka w konturze w prawym dolnym rogu */
-.g3-follow .ej-bar-inner::after {
-  content: '\2606';
-  position: absolute;
-  right: 3px;
-  bottom: 0;
-  font-size: 13px;
-  line-height: 1;
-  -webkit-text-stroke: 0;
-}
-
 /* Błysk przy nowym followie: 3 mignięcia koralem */
 .g3-follow.is-flash .ej-bar-inner {
   animation: g3-flash 0.6s ease-in-out 3;
