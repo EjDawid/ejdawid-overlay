@@ -53,7 +53,7 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 
 ## 4. Układ na ekranie 1920×1080 [D]
 
-- Kolumna: 360 px szerokości, lewy margines 40 px, wyśrodkowana w pionie. Od góry: G1 (sylwetka: ramiona mniej więcej na szerokość kolumny, wyśrodkowana nad kolumną, ramionami na pasku G2; w OBS obraz kamerki ok. 546×410 px przed przycięciem, Crop góra 50 / dół 74, dół kadru na y=530), G2 (60 px, od y=530), odstęp 20 px, G3 (60 px), odstęp 20 px, G4 Tipply (60 px).
+- Kolumna: 360 px szerokości, lewy margines 40 px, wyśrodkowana w pionie. Od góry: G1 (sylwetka: ramiona mniej więcej na szerokość kolumny, wyśrodkowana nad kolumną, ramionami na pasku G2; w OBS: rozmiar 546×410 px przed przycięciem, Crop lewo 103 / prawo 115 / góra 50 / dół 74, kadr przycięty dokładnie do szerokości kolumny (x 40–400), dół kadru wsunięty ok. 6 px pod G2 (y≈536), bez przerwy między kamerką a paskiem), G2 (60 px, od y=530), odstęp 20 px, G3 (60 px), odstęp 20 px, G4 Tipply (60 px).
 - G5 naszywka (tarcza): ok. 200×175 px, obok głowy nad prawym ramieniem sylwetki (x≈350–550, y≈225–400), obrót −6°; nie może zasłaniać głowy.
 - G6 karta: 440×190–220 px (wysokość zależy od tekstu), 60 px na prawo od kolumny, na wysokości pasków (od y=530), obrót −2°. G7 Tipply: 440×110 px, 30 px pod najwyższą kartą, czyli od y≈775.
 - Ekrany: ilustracja na całym ekranie; taśma E2 ukośna (−6°) w górnej 1/4; czat E3 460×620 px przy prawej krawędzi (margines 60 px, y≈300–920); alerty w prześwicie nieba x≈1050–1420, y≈320–620; pastylka E7 (tylko koniec) wyśrodkowana na dole (ok. 36 px od dolnej krawędzi).
