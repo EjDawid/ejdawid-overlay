@@ -10,7 +10,6 @@
   const CHAT_MAX = 30; // E3: tyle ostatnich wiadomości w DOM (spec 6)
   // E2: napisy na taśmie według trybu; koniec: jeden duży napis
   const TAPE_TEXT = { start: 'ZARAZ ZACZYNAMY', przerwa: 'ZARAZ WRACAMY', koniec: 'DZIĘKI ZA DZIŚ' };
-  const PILL_TEXT = 'kolejny stream: jak na grafiku'; // E7
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ?debug=1 w adresie skryptu włącza napis z ostatnim zdarzeniem
@@ -99,10 +98,11 @@
     el.tapeText = make('div', 'e2-text');
     tapeWrap.appendChild(el.tapeText);
     root.appendChild(tapeWrap);
-    el.chat = make('div', 'e-screen e3-chat');
-    root.appendChild(el.chat);
-    root.appendChild(buildPlant());
-    root.appendChild(make('div', 'e-screen e7-pill', PILL_TEXT));
+    // E3: ramka + lista w środku; lista obcina stare wiadomości przed ramką
+    const chatBox = make('div', 'e-screen e3-chat');
+    el.chat = make('div', 'e3-list');
+    chatBox.appendChild(el.chat);
+    root.appendChild(chatBox);
 
     // Kolumna przy lewej krawędzi (tylko tryb gra)
     const column = make('div', 'g-column');
@@ -149,17 +149,6 @@
       }));
     });
     return g;
-  }
-
-  // E6: mała roślinka w doniczce (ekran przerwy), bez funkcji
-  function buildPlant() {
-    const plant = svg('svg', { class: 'e-screen e6-plant', viewBox: '0 0 70 80', width: 70, height: 80 });
-    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q14 40 10 20 Q30 22 35 46 Z' }));
-    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q56 38 60 16 Q40 20 35 46 Z' }));
-    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q28 22 36 4 Q46 24 35 46 Z' }));
-    plant.appendChild(svg('path', { class: 'e6-pot', d: 'M16 46 H54 L49 76 H21 Z' }));
-    plant.appendChild(svg('path', { class: 'e6-rim', d: 'M13 44 H57 V52 H13 Z' }));
-    return plant;
   }
 
   // G5: naszywka-tarcza 200×175 (SVG) + tekst

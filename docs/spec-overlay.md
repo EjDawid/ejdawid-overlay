@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.12, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
+Wersja 1.13, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -31,8 +31,8 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 | E3 | Czat po prawej: ciemnomorski kanciasty panel, kończy się nad dolnym pasem; nowe wiadomości wjeżdżają od dołu | ekrany | kod |
 | E4 | Alerty (G5, G6, G7) w prześwicie nieba między chatą a czatem; mogą nachodzić na tło, nigdy na czat ani na chatę | ekrany | układ |
 | E5 | Przejście na przerwę między scenami OBS | OBS | OBS |
-| E6 | Easter egg: miejsce na mały własny symbol w rogu (roślinka), bez funkcji | ekran przerwy | kod |
-| E7 | Pastylka na dole tylko na ekranie końca: stały napis „kolejny stream: jak na grafiku”. Start i przerwa bez pastylki | ekran końca | kod |
+| E6 | Usunięte w 1.13 (roślinka na przerwie niepotrzebna) | — | — |
+| E7 | Usunięte w 1.13 (napis „kolejny stream: jak na grafiku” brzmiał niemiło) | — | — |
 | W1 | Loader w SE Custom Widget: wczytuje `overlay.css` i `overlay.js` z GitHub Pages, przekazuje zdarzenia | SE | kod (jednorazowo wklejony) |
 | W2 | Tryb testowy: przyciski w polach widgetu symulują każde zdarzenie | SE | kod |
 | W3 | Ustawienia bez kodu (pola widgetu): tryb ekranu, cel followów, czas naszywki, czas karty, próg bitsów dla karty, dźwięki | SE | kod (Fields) |
@@ -56,7 +56,7 @@ Zakres na debiut: tylko podstawowe funkcje z tej speki. Wszystko inne dochodzi p
 - Kolumna: 360 px szerokości, lewy margines 40 px, wyśrodkowana w pionie. Od góry: G1 (sylwetka: ramiona mniej więcej na szerokość kolumny, wyśrodkowana nad kolumną, ramionami na pasku G2; w OBS: rozmiar 546×410 px przed przycięciem, Crop lewo 103 / prawo 115 / góra 50 / dół 74, kadr przycięty dokładnie do szerokości kolumny (x 40–400), dół kadru wsunięty ok. 6 px pod G2 (y≈536), bez przerwy między kamerką a paskiem), G2 (60 px, od y=530), odstęp 20 px, G3 (60 px), odstęp 20 px, G4 Tipply (60 px).
 - G5 naszywka (tarcza): ok. 200×175 px, obok głowy nad prawym ramieniem sylwetki (x≈350–550, y≈225–400), obrót −6°; nie może zasłaniać głowy.
 - G6 karta: 440×190–220 px (wysokość zależy od tekstu), 60 px na prawo od kolumny, na wysokości pasków (od y=530), obrót −2°. G7 Tipply: 440×110 px, 30 px pod najwyższą kartą, czyli od y≈775.
-- Ekrany: ilustracja na całym ekranie; taśma E2 ukośna (−6°) w górnej 1/4; czat E3 460×620 px przy prawej krawędzi (margines 60 px, y≈300–920); alerty w prześwicie nieba x≈1050–1420, y≈320–620; pastylka E7 (tylko koniec) wyśrodkowana na dole (ok. 36 px od dolnej krawędzi).
+- Ekrany: ilustracja na całym ekranie; taśma E2 ukośna (−6°) w górnej 1/4; czat E3 460×620 px przy prawej krawędzi (margines 60 px, y≈300–920); alerty w prześwicie nieba x≈1050–1420, y≈320–620.
 - Niczego na środku ekranu i nigdy na dolnych 120 px (pasek przedmiotów gry).
 
 Wymiary są punktem wyjścia do testu w OBS; mogą się zmienić po pierwszym podglądzie.
@@ -71,7 +71,7 @@ Wymiary są punktem wyjścia do testu w OBS; mogą się zmienić po pierwszym po
 6. Kilka zdarzeń SE naraz: kolejka, jedno po drugim (`widgetDuration`). Donate z Tipply: niezależna karta pod G6, kolizja wykluczona układem.
 7. Gra zasłania overlay: skrót „schowaj wszystko” ukrywa grupę (overlay, kamerka, widżety Tipply); w razie potrzeby Dawid ręcznie przesuwa kamerkę w OBS.
 8. Przerwa: scena Przerwa z przejściem; taśma „ZARAZ WRACAMY ★”, czat, alerty; mikrofon wyciszony skrótem OBS.
-9. Koniec: „DZIĘKI ZA DZIŚ” + czat + pastylka „kolejny stream: jak na grafiku”.
+9. Koniec: „DZIĘKI ZA DZIŚ” + czat.
 
 ## 6. Dane i zdarzenia [CC]
 
@@ -84,7 +84,6 @@ Wymiary są punktem wyjścia do testu w OBS; mogą się zmienić po pierwszym po
 | G5 | `follower-latest`; `cheer-latest` gdy `event.amount < fieldData.bitsThreshold` | `name`, `amount` |
 | G6 | `subscriber-latest` (`name`, `amount` = miesiące, `tier`, `message`, `gifted`, `sender`, `bulkGifted`, `isCommunityGift`), `cheer-latest` gdy `amount >= bitsThreshold` (`name`, `amount`, `message`), `raid-latest` (`name`, `amount` = widzowie) | jak obok |
 | E3 | `message` (`event.data.displayName`, `text`, `emotes[]` z `start`/`end`/`urls`, `badges[]`, `msgId`, `userId`), `delete-message` (`msgId`), `delete-messages` (`userId`) | wiadomości trzymane w DOM z `data-msgid` i `data-userid` |
-| E7 | brak danych: stały tekst w kodzie, tylko w trybie `koniec` | — |
 | W2 | `widget-button` (`event.field`, `event.value`) → emitowane sztuczne `onEventReceived` | jak w docs SE |
 | W3 | `onWidgetLoad`: `fieldData` | patrz sekcja 8 |
 
@@ -94,7 +93,7 @@ Reguły:
 - Raid: karta „DZIĘKI ZA RAID!” + `name` + `amount` widzów.
 - Teksty (zatwierdzone przez Dawida): sub „DZIĘKI ZA SUB!” + nick; resub „DZIĘKI ZA SUB!” + „nick · X. miesiąc” + wiadomość; gift „SUB W PREZENCIE!” + „od {sender} dla {name}”; paczka „X SUBÓW DLA CZATU!” + „od {sender}”; bits od progu „DZIĘKI ZA BITSY!” + „nick · X bitsów” + wiadomość (bez słów `Cheer100`); raid „DZIĘKI ZA RAID!” + „nick · X widzów”; naszywka „NOWY FOLLOW!” + nick, bits poniżej progu „X BITSÓW” + nick. Liczebniki odmieniane (1 sub, 2 suby, 5 subów).
 - Czat: ostatnie 30 wiadomości w DOM, starsze usuwane; emotki zamieniane na `<img>` z `urls["2"]`; tekst wstawiany jako tekst (nigdy innerHTML z treści widza).
-- Wygląd ekranów (kawałek 4): taśma E2 kremowa z atramentowymi krawędziami i cienkimi paskami `#9D585B`, napis ciemnym brązem (Alfa Slab One 70 px) powtarzany z ★; na końcu jeden duży napis „DZIĘKI ZA DZIŚ” (110 px). Czat E3: tło morskie, kontur atramentowy 4 px + wewnętrzna kremowa linia 3 px, cień atramentowy; nick `#E3A08F`, tekst kremowy 26 px; emotki rozpoznawane po nazwie słowa (`emotes[].name`), tylko adresy https. E6: mała roślinka (SVG: liście morskie, doniczka koralowa) w lewym dolnym rogu ekranu przerwy. E7: pastylka morska z kremowym tekstem, kanciasta. Na ekranach karta G6 pomniejszona do 0,8, żeby nie nachodziła na czat.
+- Wygląd ekranów (kawałek 4): taśma E2 kremowa z atramentowymi krawędziami i cienkimi paskami `#9D585B`, napis ciemnym brązem (Alfa Slab One 70 px) powtarzany z ★; na końcu jeden duży napis „DZIĘKI ZA DZIŚ” (110 px). Czat E3: tło morskie, kontur atramentowy 4 px + wewnętrzna kremowa linia 3 px, cień atramentowy; nick `#E3A08F`, tekst kremowy 26 px; wiadomości obcinane wewnątrz marginesu 24 px, nigdy nie wchodzą na ramkę; emotki rozpoznawane po nazwie słowa (`emotes[].name`), tylko adresy https. Na ekranach karta G6 pomniejszona do 0,8, żeby nie nachodziła na czat.
 - Brak danych na starcie (np. `follower-latest` puste): G3 pokazuje „jeszcze nikt”.
 - Długie nicki (Twitch: do 25 znaków): G3 zmniejsza czcionkę paska (22→14 px), na końcu „…”; G5 nick 22→15 px, potem 2 linie; G6 linia z nickiem 24→17 px, potem 2 linie. Nic nie wychodzi poza element.
 
@@ -153,7 +152,7 @@ Kolejność wdrożenia (pionowe kawałki, każdy testowany w OBS):
 1. Loader + `overlay.js` wypisujący „działa” i tryb z `fieldData` (test, czy SE przepuszcza skrypt z GitHub Pages).
 2. G2 + G3 z danymi sesji.
 3. G5 + G6 + W2 + dźwięki.
-4. E1 + E2 + E3 + E6 + E7.
+4. E1 + E2 + E3 (E6 i E7 usunięte w 1.13).
 5. Dopieszczenie wymiarów po teście w OBS.
 
 ## 10. Poza zakresem (na debiut)

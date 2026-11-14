@@ -2,7 +2,7 @@
 
 Overlay streamu Twitch kanału **EjDawid**: paski i alerty w scenie gry oraz trzy ekrany (start, przerwa, koniec). Kod żyje w tym repo, jest serwowany z GitHub Pages i wczytywany do OBS przez Custom Widget w StreamElements (SE).
 
-**Specyfikacja:** `docs/spec-overlay.md` (wersja 1.12). To jest źródło prawdy. Nie dodawaj niczego, czego tam nie ma.
+**Specyfikacja:** `docs/spec-overlay.md` (wersja 1.13). To jest źródło prawdy. Nie dodawaj niczego, czego tam nie ma.
 **Wzory wyglądu:** `docs/ref/*.png` (grafiki Dawida). Przy różnicy między speką a obrazkiem pytaj.
 
 ## Z kim pracujesz
@@ -61,7 +61,7 @@ img/scena-chaty.png      tło ekranów (statyczne)
 1. Loader + `overlay.js` pokazujący „działa” i tryb z `fieldData`. Test: czy SE wczytuje skrypt z GitHub Pages. Jeśli nie: zapas = cały kod wklejony bezpośrednio w Custom Widget.
 2. G2 + G3 z danymi sesji.
 3. G5 + G6 + tryb testowy W2 + dźwięki.
-4. E1 + E2 + E3 + E6 + E7 (ekrany).
+4. E1 + E2 + E3 (ekrany; E6 i E7 usunięte w 1.13).
 5. Dopieszczenie wymiarów po teście w OBS.
 
 Każdy kawałek: najpierw działa w `index.html` w przeglądarce, potem push, potem test w OBS przez SE. Nie zaczynaj następnego, zanim Dawid nie potwierdzi poprzedniego.
