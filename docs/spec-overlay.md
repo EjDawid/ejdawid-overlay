@@ -1,6 +1,6 @@
 # Spec: overlay streamu EjDawid
 
-Wersja 1.11, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
+Wersja 1.12, 14.11.2026. Źródło decyzji: dokument „Plan streamowy” Dawida (karty „OBS i overlay” i „Marka”). Wzory wyglądu: `docs/ref/`, wycięte z tła: `docs/ref/wyciete/` (paski G2–G4, naszywka G5, karta G6).
 
 Oznaczenia sekcji:
 - **[D]** sekcje do przeczytania i zatwierdzenia przez Dawida.
@@ -94,6 +94,7 @@ Reguły:
 - Raid: karta „DZIĘKI ZA RAID!” + `name` + `amount` widzów.
 - Teksty (zatwierdzone przez Dawida): sub „DZIĘKI ZA SUB!” + nick; resub „DZIĘKI ZA SUB!” + „nick · X. miesiąc” + wiadomość; gift „SUB W PREZENCIE!” + „od {sender} dla {name}”; paczka „X SUBÓW DLA CZATU!” + „od {sender}”; bits od progu „DZIĘKI ZA BITSY!” + „nick · X bitsów” + wiadomość (bez słów `Cheer100`); raid „DZIĘKI ZA RAID!” + „nick · X widzów”; naszywka „NOWY FOLLOW!” + nick, bits poniżej progu „X BITSÓW” + nick. Liczebniki odmieniane (1 sub, 2 suby, 5 subów).
 - Czat: ostatnie 30 wiadomości w DOM, starsze usuwane; emotki zamieniane na `<img>` z `urls["2"]`; tekst wstawiany jako tekst (nigdy innerHTML z treści widza).
+- Wygląd ekranów (kawałek 4): taśma E2 kremowa z atramentowymi krawędziami i cienkimi paskami `#9D585B`, napis ciemnym brązem (Alfa Slab One 70 px) powtarzany z ★; na końcu jeden duży napis „DZIĘKI ZA DZIŚ” (110 px). Czat E3: tło morskie, kontur atramentowy 4 px + wewnętrzna kremowa linia 3 px, cień atramentowy; nick `#E3A08F`, tekst kremowy 26 px; emotki rozpoznawane po nazwie słowa (`emotes[].name`), tylko adresy https. E6: mała roślinka (SVG: liście morskie, doniczka koralowa) w lewym dolnym rogu ekranu przerwy. E7: pastylka morska z kremowym tekstem, kanciasta. Na ekranach karta G6 pomniejszona do 0,8, żeby nie nachodziła na czat.
 - Brak danych na starcie (np. `follower-latest` puste): G3 pokazuje „jeszcze nikt”.
 - Długie nicki (Twitch: do 25 znaków): G3 zmniejsza czcionkę paska (22→14 px), na końcu „…”; G5 nick 22→15 px, potem 2 linie; G6 linia z nickiem 24→17 px, potem 2 linie. Nic nie wychodzi poza element.
 
@@ -111,7 +112,7 @@ OBS Browser Source: widżety Tipply (G4, G7), osobne adresy
 - Loader (HTML widgetu w SE, ok. 15 linii): dokłada `<link>` do CSS i `<script>` do JS z parametrem `?t=<czas wczytania>`, więc zawsze pobiera najnowszą wersję z GitHub Pages i po zmianach w kodzie nie trzeba go wklejać od nowa (wystarczy push i ponowne wejście w scenę w OBS); debug przez `DEBUG = true` w loaderze; `window.addEventListener` dla `onWidgetLoad`, `onEventReceived`, `onSessionUpdate` przekazuje `obj.detail` do `window.EjOverlay.handle(...)`. Jeśli skrypt nie wczyta się w 5 s, widget pokazuje w rogu mały napis „overlay offline”.
 - Kolejka alertów: SE dostarcza zdarzenia do widgetu po kolei z czasem `widgetDuration` (pole ukryte, wartość = czas karty + 1 s). Własna kolejka w JS tylko jako zabezpieczenie: jeśli przyjdzie zdarzenie w trakcie animacji, czeka.
 - Fonty: Google Fonts przez `<link>` w loaderze (`Alfa+Slab+One`, `Bree+Serif`, subset `latin-ext`).
-- Ilustracja chaty: `img/scena-chaty.png` (ok. 2,4 MB; rozważyć WebP), statyczna.
+- Ilustracja chaty: overlay używa `img/scena-chaty.webp` (ok. 135 KB, z `img/scena-chaty.png` 2,4 MB), statyczna.
 - Bez zewnętrznych bibliotek (jQuery jest w SE, ale go nie używamy). Czysty JS, CSS animations.
 - Sandbox SE: brak `console.log`; debug przez `?debug=1` w parametrze loadera wyświetlający ostatnie zdarzenie w rogu.
 - Dźwięki: tylko z pól `sound-input` SE (Dawid wybiera lub wgrywa plik w SE), odtwarzane przez `Audio`; puste pole = bez dźwięku. Brak plików dźwiękowych w repo.

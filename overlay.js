@@ -7,6 +7,10 @@
   const DEFAULT_GOAL = 100;
   const NO_FOLLOWER = 'jeszcze nikt';
   const EXIT_MS = 700; // czas animacji wyjścia (odwrócona pieczątka), jak w overlay.css
+  const CHAT_MAX = 30; // E3: tyle ostatnich wiadomości w DOM (spec 6)
+  // E2: napisy na taśmie według trybu; koniec: jeden duży napis
+  const TAPE_TEXT = { start: 'ZARAZ ZACZYNAMY', przerwa: 'ZARAZ WRACAMY', koniec: 'DZIĘKI ZA DZIŚ' };
+  const PILL_TEXT = 'kolejny stream: jak na grafiku'; // E7
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   // ?debug=1 w adresie skryptu włącza napis z ostatnim zdarzeniem
@@ -89,6 +93,17 @@
       document.body.appendChild(root);
     }
 
+    // Ekrany start / przerwa / koniec (spec 2: E1–E7); CSS chowa je w trybie gra
+    root.appendChild(make('div', 'e-screen e1-scene'));
+    const tapeWrap = make('div', 'e-screen e2-tape');
+    el.tapeText = make('div', 'e2-text');
+    tapeWrap.appendChild(el.tapeText);
+    root.appendChild(tapeWrap);
+    el.chat = make('div', 'e-screen e3-chat');
+    root.appendChild(el.chat);
+    root.appendChild(buildPlant());
+    root.appendChild(make('div', 'e-screen e7-pill', PILL_TEXT));
+
     // Kolumna przy lewej krawędzi (tylko tryb gra)
     const column = make('div', 'g-column');
 
@@ -136,6 +151,17 @@
     return g;
   }
 
+  // E6: mała roślinka w doniczce (ekran przerwy), bez funkcji
+  function buildPlant() {
+    const plant = svg('svg', { class: 'e-screen e6-plant', viewBox: '0 0 70 80', width: 70, height: 80 });
+    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q14 40 10 20 Q30 22 35 46 Z' }));
+    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q56 38 60 16 Q40 20 35 46 Z' }));
+    plant.appendChild(svg('path', { class: 'e6-leaf', d: 'M35 46 Q28 22 36 4 Q46 24 35 46 Z' }));
+    plant.appendChild(svg('path', { class: 'e6-pot', d: 'M16 46 H54 L49 76 H21 Z' }));
+    plant.appendChild(svg('path', { class: 'e6-rim', d: 'M13 44 H57 V52 H13 Z' }));
+    return plant;
+  }
+
   // G5: naszywka-tarcza 200×175 (SVG) + tekst
   function buildBadge(headline, nick) {
     const badge = make('div', 'g5-badge');
@@ -172,6 +198,69 @@
     state.mode = MODES.includes(mode) ? mode : 'gra';
     MODES.forEach((m) => document.body.classList.remove('mode-' + m));
     document.body.classList.add('mode-' + state.mode);
+    renderTape();
+  }
+
+  // E2: start/przerwa – napis powtarzany z gwiazdką; koniec – jeden duży napis
+  function renderTape() {
+    const text = TAPE_TEXT[state.mode];
+    if (!text) {
+      el.tapeText.textContent = '';
+      return;
+    }
+    el.tapeText.textContent = state.mode === 'koniec' ? text : Array(4).fill(text).join(' ★ ') + ' ★';
+  }
+
+  // ---------- E3: czat ----------
+
+  // Bezpieczny adres obrazka emotki (tylko https)
+  function emoteUrl(emote) {
+    const urls = (emote && emote.urls) || {};
+    const url = urls['2'] || urls['1'] || urls['4'] || '';
+    return /^https:\/\//.test(url) ? url : '';
+  }
+
+  // Tekst wiadomości -> węzły: słowa będące emotkami jako <img>, reszta jako tekst
+  function messageNodes(text, emotes) {
+    const byName = {};
+    (emotes || []).forEach((e) => {
+      const url = emoteUrl(e);
+      if (e && e.name && url) byName[e.name] = url;
+    });
+    const out = [];
+    text.split(/(\s+)/).forEach((part) => {
+      if (byName[part]) {
+        const img = document.createElement('img');
+        img.className = 'e3-emote';
+        img.src = byName[part];
+        img.alt = part;
+        out.push(img);
+      } else if (part) {
+        out.push(document.createTextNode(part));
+      }
+    });
+    return out;
+  }
+
+  function onChatMessage(data) {
+    if (!data) return;
+    const text = String(data.text || '');
+    if (!text.trim()) return;
+    const msg = make('div', 'e3-msg');
+    msg.dataset.msgid = String(data.msgId || '');
+    msg.dataset.userid = String(data.userId || '');
+    msg.appendChild(make('span', 'e3-name', String(data.displayName || data.nick || '') + ': '));
+    messageNodes(text, data.emotes).forEach((n) => msg.appendChild(n));
+    el.chat.appendChild(msg);
+    while (el.chat.children.length > CHAT_MAX) el.chat.firstChild.remove();
+  }
+
+  // Usuwanie przez moderację: jedna wiadomość albo wszystkie od widza
+  function removeChat(attr, value) {
+    if (!value) return;
+    Array.from(el.chat.children).forEach((m) => {
+      if (m.dataset[attr] === String(value)) m.remove();
+    });
   }
 
   // G2: „Cel followów: 32/50” + „64%” po prawej, albo „Cel osiągnięty ★”
@@ -333,6 +422,15 @@
     else if (fieldName === 'testSub') fake('subscriber-latest', { name: 'test_widz', amount: 5, message: 'Testowa wiadomość suba' });
     else if (fieldName === 'testGift') fake('subscriber-latest', { name: 'test_widz', sender: 'test_widz', amount: 5, gifted: true, bulkGifted: true });
     else if (fieldName === 'testRaid') fake('raid-latest', { name: 'test_widz', amount: 12 });
+    else if (fieldName === 'testChat') {
+      fake('message', { data: {
+        displayName: 'test_widz',
+        text: 'Hej, testowa wiadomość z emotką Kappa',
+        emotes: [{ name: 'Kappa', urls: { 2: 'https://static-cdn.jtvnw.net/emoticons/v2/25/default/dark/2.0' } }],
+        msgId: 'test-' + Date.now(),
+        userId: 'test',
+      } });
+    }
     else if (fieldName === 'testBits') {
       // na zmianę: poniżej progu (G5) i od progu (G6)
       state.testBitsBig = !state.testBitsBig;
@@ -354,6 +452,9 @@
       case 'cheer-latest': onCheer(ev); break;
       case 'subscriber-latest': onSub(ev); break;
       case 'raid-latest': onRaid(ev); break;
+      case 'message': onChatMessage(ev.data); break;
+      case 'delete-message': removeChat('msgid', ev.msgId || (ev.data && ev.data.msgId)); break;
+      case 'delete-messages': removeChat('userid', ev.userId || (ev.data && ev.data.userId)); break;
       default: break;
     }
   }

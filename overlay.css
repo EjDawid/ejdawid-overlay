@@ -19,6 +19,7 @@
   --card-back: #D19289;  /* różowa kartka pod spodem G6 */
   --card-paper: #F0D5A5; /* papier karty G6 */
   --card-stain: #C8A87C; /* przetarte rogi papieru G6 */
+  --chat-name: #E3A08F;  /* nick na czacie E3 (wzór: docs/ref/ekran-startu-uklad.png) */
 
   --font-head: 'Alfa Slab One', serif;
   --font-body: 'Bree Serif', serif;
@@ -36,6 +37,162 @@
   overflow: hidden;
   font-family: var(--font-body);
   color: var(--ink);
+}
+
+/* ---------- Ekrany start / przerwa / koniec (E1–E7), spec 2 i 4 ----------
+   W trybie gra wszystko z klasą .e-screen jest schowane. */
+body.mode-gra .e-screen {
+  display: none !important;
+}
+
+/* E1: ilustracja chaty na całym ekranie (statyczna) */
+.e1-scene {
+  position: absolute;
+  inset: 0;
+  background: url('img/scena-chaty.webp') center / cover no-repeat;
+}
+
+/* E2: ukośna taśma (−6°) w górnej 1/4 ekranu */
+.e2-tape {
+  position: absolute;
+  left: -160px;
+  top: 90px;
+  width: 2240px;
+  box-sizing: border-box;
+  padding: 14px 0;
+  background: var(--cream);
+  border-top: 4px solid var(--ink);
+  border-bottom: 4px solid var(--ink);
+  transform: rotate(-6deg);
+  overflow: hidden;
+}
+
+/* cienkie różowe paski przy krawędziach taśmy (jak na wzorze) */
+.e2-tape::before,
+.e2-tape::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--rose-dim);
+}
+
+.e2-tape::before {
+  top: 6px;
+}
+
+.e2-tape::after {
+  bottom: 6px;
+}
+
+.e2-text {
+  font-family: var(--font-head);
+  font-size: 70px;
+  line-height: 1.1;
+  color: var(--brown);
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* koniec: jeden duży napis */
+body.mode-koniec .e2-tape {
+  top: 120px;
+  padding: 22px 0;
+}
+
+body.mode-koniec .e2-text {
+  font-size: 110px;
+}
+
+/* E3: czat po prawej, 460×620, margines 60 px, y 300–920; nowe wiadomości od dołu */
+.e3-chat {
+  position: absolute;
+  right: 60px;
+  top: 300px;
+  width: 460px;
+  height: 620px;
+  box-sizing: border-box;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  overflow: hidden;
+  background: var(--sea);
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 3px var(--cream), 6px 6px 0 var(--ink);
+}
+
+.e3-msg {
+  flex: none;
+  font-size: 26px;
+  line-height: 1.3;
+  color: var(--cream);
+  overflow-wrap: anywhere;
+  animation: e3-in 0.4s ease-out both;
+}
+
+.e3-name {
+  color: var(--chat-name);
+}
+
+.e3-emote {
+  height: 1.3em;
+  vertical-align: middle;
+}
+
+@keyframes e3-in {
+  0% { transform: translateY(40px); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+
+/* E6: roślinka w lewym dolnym rogu, tylko przerwa */
+.e6-plant {
+  position: absolute;
+  left: 40px;
+  bottom: 36px;
+  display: none;
+}
+
+body.mode-przerwa .e6-plant {
+  display: block;
+}
+
+.e6-leaf {
+  fill: var(--sea);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+
+.e6-pot,
+.e6-rim {
+  fill: var(--coral);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+/* E7: pastylka na dole, tylko koniec */
+.e7-pill {
+  position: absolute;
+  left: 50%;
+  bottom: 36px;
+  display: none;
+  transform: translateX(-50%);
+  padding: 10px 28px;
+  background: var(--sea);
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 3px var(--cream);
+  color: var(--cream);
+  font-size: 28px;
+  white-space: nowrap;
+}
+
+body.mode-koniec .e7-pill {
+  display: block;
 }
 
 /* ---------- Kolumna (scena Gra), spec 4 ----------
@@ -158,10 +315,11 @@ body:not(.mode-gra) .g5-slot {
   top: 380px;
 }
 
+/* skala 0,8: karta 352 px kończy się przed czatem (x 1400) */
 body:not(.mode-gra) .g6-slot {
-  left: 1048px;
+  left: 1040px;
   top: 390px;
-  transform: rotate(-2deg) scale(0.85);
+  transform: rotate(-2deg) scale(0.8);
   transform-origin: 0 0;
 }
 

@@ -54,6 +54,17 @@
     <button data-test="testGift">testGift</button>
     <button data-test="testBits">testBits</button>
     <button data-test="testRaid">testRaid</button>
+    <button data-test="testChat">testChat</button>
+  </div>
+  <div class="panel">
+    <strong>Czat (E3):</strong>
+    <button id="chat1">Wiadomość</button>
+    <button id="chatEmote">Z emotkami</button>
+    <button id="chatLong">Długa</button>
+    <button id="chat40">40 wiadomości</button>
+    <button id="chatDelLast">Usuń ostatnią (mod)</button>
+    <button id="chatDelUser">Usuń wszystkie od ola (mod)</button>
+    <button id="chatEvil">Próba HTML w treści</button>
   </div>
   <div class="stage-wrap">
     <div class="stage">
@@ -131,6 +142,23 @@
     document.querySelectorAll('[data-ev]').forEach(function (btn) {
       btn.addEventListener('click', function () { events[btn.dataset.ev](); });
     });
+    // Czat: zdarzenia jak z SE (listener 'message', dane w event.data)
+    var chatN = 0, lastMsgId = '';
+    var kappa = { name: 'Kappa', urls: { 1: '', 2: 'https://static-cdn.jtvnw.net/emoticons/v2/25/default/dark/2.0', 4: '' } };
+    function chat(name, text, emotes) {
+      chatN++;
+      lastMsgId = 'm' + chatN;
+      ev('message', { data: { displayName: name, nick: name.toLowerCase(), text: text, emotes: emotes || [], msgId: lastMsgId, userId: 'u_' + name } });
+    }
+    var lines = ['hejka!', 'co dziś budujemy?', 'czekam na start', '<3', 'Dawid, pokaż chatę!'];
+    document.getElementById('chat1').onclick = function () { chat(nicks[chatN % nicks.length], lines[chatN % lines.length]); };
+    document.getElementById('chatEmote').onclick = function () { chat('ola', 'Kappa to jest test Kappa', [kappa]); };
+    document.getElementById('chatLong').onclick = function () { chat('BardzoDlugiNickWidza_12345', 'Bardzo długa wiadomość bez sensu, żeby sprawdzić zawijanie w panelu czatu: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa koniec.'); };
+    document.getElementById('chat40').onclick = function () { for (var i = 0; i < 40; i++) chat(nicks[i % nicks.length], 'wiadomość nr ' + (chatN + 1)); };
+    document.getElementById('chatDelLast').onclick = function () { ev('delete-message', { msgId: lastMsgId }); };
+    document.getElementById('chatDelUser').onclick = function () { ev('delete-messages', { userId: 'u_ola' }); };
+    document.getElementById('chatEvil').onclick = function () { chat('<b>haker</b>', '<img src=x onerror=alert(1)> <script>alert(2)<\/script>'); };
+
     document.querySelectorAll('[data-test]').forEach(function (btn) {
       btn.addEventListener('click', function () { ev('widget-button', { field: btn.dataset.test, value: '' }); });
     });

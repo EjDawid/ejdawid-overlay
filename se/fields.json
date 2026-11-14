@@ -83,6 +83,12 @@
     "value": "raid",
     "group": "Testy"
   },
+  "testChat": {
+    "type": "button",
+    "label": "Test: czat (tylko ekrany)",
+    "value": "chat",
+    "group": "Testy"
+  },
   "widgetDuration": {
     "type": "hidden",
     "value": 8
