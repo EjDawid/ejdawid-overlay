@@ -8,7 +8,7 @@
   const NO_FOLLOWER = 'jeszcze nikt';
   const EXIT_MS = 700; // czas animacji wyjścia (odwrócona pieczątka), jak w overlay.css
   const CHAT_MAX = 30; // E3: tyle ostatnich wiadomości w DOM (spec 6)
-  // E2: napisy na taśmie według trybu; koniec: jeden duży napis
+  // E2: napisy na taśmie według trybu
   const TAPE_TEXT = { start: 'ZARAZ ZACZYNAMY', przerwa: 'ZARAZ WRACAMY', koniec: 'DZIĘKI ZA DZIŚ' };
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -190,14 +190,14 @@
     renderTape();
   }
 
-  // E2: start/przerwa – napis powtarzany z gwiazdką; koniec – jeden duży napis
+  // E2: napis powtarzany z gwiazdką na każdym ekranie
   function renderTape() {
     const text = TAPE_TEXT[state.mode];
     if (!text) {
       el.tapeText.textContent = '';
       return;
     }
-    el.tapeText.textContent = state.mode === 'koniec' ? text : Array(4).fill(text).join(' ★ ') + ' ★';
+    el.tapeText.textContent = Array(4).fill(text).join(' ★ ') + ' ★';
   }
 
   // ---------- E3: czat ----------

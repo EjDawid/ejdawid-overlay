@@ -95,16 +95,6 @@ body.mode-gra .e-screen {
   text-align: center;
 }
 
-/* koniec: jeden duży napis */
-body.mode-koniec .e2-tape {
-  top: 120px;
-  padding: 22px 0;
-}
-
-body.mode-koniec .e2-text {
-  font-size: 110px;
-}
-
 /* E3: czat po prawej, 460×620, margines 60 px, y 300–920; nowe wiadomości od dołu */
 .e3-chat {
   position: absolute;
