@@ -9,5 +9,11 @@
       "przerwa": "Przerwa",
       "koniec": "Koniec"
     }
+  },
+  "followGoal": {
+    "type": "number",
+    "label": "Cel followów",
+    "value": 100,
+    "min": 1
   }
 }

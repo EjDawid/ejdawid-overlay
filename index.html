@@ -7,25 +7,42 @@
   <link rel="stylesheet" href="overlay.css">
   <style>
     /* Style tylko podglądu, nie trafiają do SE */
-    :root { --preview-bg: #555; --panel-bg: #222; --panel-fg: #eee; }
+    :root { --preview-bg: #555; --panel-bg: #222; --panel-fg: #eee; --guide: #ffffff88; }
     body { margin: 0; background: var(--panel-bg); color: var(--panel-fg); font-family: sans-serif; }
-    .panel { padding: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .panel button { font-size: 14px; padding: 6px 10px; cursor: pointer; }
+    .panel { padding: 6px 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .panel button, .panel input { font-size: 14px; padding: 5px 9px; }
+    .panel input { width: 70px; }
     /* Płótno 1920×1080 pomniejszone o połowę */
-    .stage-wrap { width: 960px; height: 540px; margin: 0 10px; outline: 1px dashed var(--panel-fg); }
+    .stage-wrap { width: 960px; height: 540px; margin: 6px 10px; outline: 1px dashed var(--panel-fg); }
     .stage { position: relative; width: 1920px; height: 1080px; transform: scale(0.5); transform-origin: 0 0; background: var(--preview-bg); }
+    /* Miejsca elementów spoza kodu: G1 kamerka (OBS), G4 Tipply, pasek przedmiotów */
+    .guide { position: absolute; border: 3px dashed var(--guide); color: var(--guide); font-size: 26px; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
   </style>
 </head>
 <body>
   <div class="panel">
-    <strong>Tryb (onWidgetLoad):</strong>
+    <strong>Tryb:</strong>
     <button data-mode="gra">gra</button>
     <button data-mode="start">start</button>
     <button data-mode="przerwa">przerwa</button>
     <button data-mode="koniec">koniec</button>
   </div>
+  <div class="panel">
+    <strong>Sesja:</strong>
+    cel <input id="goal" type="number" value="50">
+    followy <input id="count" type="number" value="32">
+    <button id="load">Wczytaj (onWidgetLoad)</button>
+    <button id="empty">Pusty start (brak followa)</button>
+    <button id="follow">Nowy follow</button>
+    <button id="longnick">Follow z długim nickiem</button>
+  </div>
   <div class="stage-wrap">
-    <div class="stage"><div id="ej-root"></div></div>
+    <div class="stage">
+      <div class="guide" style="left:40px;top:330px;width:360px;height:200px">G1 kamerka (OBS)</div>
+      <div class="guide" style="left:40px;top:690px;width:360px;height:60px">G4 Tipply</div>
+      <div class="guide" style="left:0;top:960px;width:1920px;height:120px">pasek przedmiotów gry (nic tu)</div>
+      <div id="ej-root"></div>
+    </div>
   </div>
 
   <script>
@@ -38,16 +55,41 @@
       });
     });
 
-    // Symulacja SE: onWidgetLoad z fieldData
-    function widgetLoad(mode) {
-      window.dispatchEvent(new CustomEvent('onWidgetLoad', {
-        detail: { fieldData: { mode: mode }, session: { data: {} } }
-      }));
+    // Symulacja SE
+    var sim = { mode: 'gra', latest: 'kasia_m' };
+    var nicks = ['zielony_lis', 'bartek99', 'ola', 'Żółw_Łódź', 'kasia_m'];
+    function emit(type, detail) { window.dispatchEvent(new CustomEvent(type, { detail: detail })); }
+    function count() { return Number(document.getElementById('count').value); }
+    function session() {
+      return { 'follower-total': { count: count() }, 'follower-latest': { name: sim.latest } };
     }
+    function widgetLoad() {
+      emit('onWidgetLoad', {
+        fieldData: { mode: sim.mode, followGoal: Number(document.getElementById('goal').value) },
+        session: { data: session() }
+      });
+    }
+    function follow(name) {
+      sim.latest = name;
+      document.getElementById('count').value = count() + 1;
+      emit('onEventReceived', { listener: 'follower-latest', event: { name: name, amount: 0 } });
+      emit('onSessionUpdate', { session: session() });
+    }
+
     document.querySelectorAll('[data-mode]').forEach(function (btn) {
-      btn.addEventListener('click', function () { widgetLoad(btn.dataset.mode); });
+      btn.addEventListener('click', function () { sim.mode = btn.dataset.mode; widgetLoad(); });
     });
-    widgetLoad('gra');
+    document.getElementById('load').onclick = widgetLoad;
+    document.getElementById('empty').onclick = function () {
+      sim.latest = '';
+      document.getElementById('count').value = 0;
+      widgetLoad();
+    };
+    document.getElementById('follow').onclick = function () {
+      follow(nicks[Math.floor(Math.random() * nicks.length)]);
+    };
+    document.getElementById('longnick').onclick = function () { follow('BardzoDlugiNickWidza_12345'); };
+    widgetLoad();
   </script>
   <script src="overlay.js?debug=1"></script>
 </body>

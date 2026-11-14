@@ -16,7 +16,7 @@
   --font-body: 'Bree Serif', serif;
 
   --outline: 4px solid var(--ink);
-  --shadow: 6px 6px 0 var(--rose-dim);
+  --shadow-bar: 6px 6px 0 var(--rose-dim);
 }
 
 /* Płótno 1920×1080, przezroczyste */
@@ -31,21 +31,82 @@
   color: var(--ink);
 }
 
-/* Kawałek 1: napis testowy „overlay działa” (do usunięcia w kawałku 2) */
-.ej-hello {
+/* ---------- Kolumna (scena Gra), spec 4 ----------
+   Kolumna 420 px wyśrodkowana w pionie: góra 330 px.
+   G1 (kamerka z OBS) zajmuje 330–530, więc paski zaczynają się od 530. */
+.g-column {
+  display: none;
   position: absolute;
   left: 40px;
-  top: 40px;
-  padding: 12px 20px;
+  top: 530px;
+  width: 360px;
+}
+
+body.mode-gra .g-column {
+  display: block;
+}
+
+/* Wspólny pasek G2/G3 */
+.ej-bar {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 360px;
+  height: 60px;
+  padding: 0 14px;
   background: var(--cream);
   border: var(--outline);
   border-radius: 0;
-  box-shadow: var(--shadow);
-  font-size: 32px;
+  box-shadow: var(--shadow-bar);
+  font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.ej-hello-mode {
+/* G2: cel followów */
+.g2-value,
+.g2-percent {
   color: var(--plum);
+}
+
+.g2-percent {
+  margin-left: auto;
+}
+
+.g2-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 8px;
+  background: var(--coral);
+}
+
+/* G3: ostatni follow */
+.g3-follow {
+  margin-top: 20px;
+}
+
+.g3-label {
+  flex: none;
+}
+
+.g3-nick {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--plum);
+}
+
+.g3-follow.is-flash {
+  animation: g3-flash 1.2s ease-out;
+}
+
+@keyframes g3-flash {
+  0%, 30% { background: var(--apricot); }
+  100% { background: var(--cream); }
 }
 
 /* Napis debug (?debug=1) w prawym górnym rogu */
