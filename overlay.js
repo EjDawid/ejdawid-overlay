@@ -321,12 +321,16 @@
   function onEventReceived(detail) {
     if (!detail || !detail.event) return;
     const ev = detail.event;
+    // Przycisk pola: SE podaje 'widget-button' w detail.listener albo w detail.event.listener
+    if (detail.listener === 'widget-button' || ev.listener === 'widget-button') {
+      onTestButton(ev.field);
+      return;
+    }
     switch (detail.listener) {
       case 'follower-latest': onFollow(ev); break;
       case 'cheer-latest': onCheer(ev); break;
       case 'subscriber-latest': onSub(ev); break;
       case 'raid-latest': onRaid(ev); break;
-      case 'widget-button': onTestButton(ev.field); break;
       default: break;
     }
   }
